@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 110">
+  <!-- Kuncup mawar tampak samping + kelopak hijau (sepal) sage. -->
+  <defs>
+    <linearGradient id="bud-l" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#FBEDEA"/>
+      <stop offset="100%" stop-color="#EBC8CE"/>
+    </linearGradient>
+    <linearGradient id="bud-r" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#F4DADD"/>
+      <stop offset="100%" stop-color="#DDAEB8"/>
+    </linearGradient>
+    <linearGradient id="bud-c" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#E9C0C8"/>
+      <stop offset="100%" stop-color="#CB929D"/>
+    </linearGradient>
+  </defs>
+
+  <!-- tangkai -->
+  <path d="M35 58 C34 74 36 92 34 106" fill="none" stroke="#8FA67E" stroke-width="3" stroke-linecap="round"/>
+  <!-- daun kecil di tangkai -->
+  <path d="M35 84 C42 80 50 80 55 85 C49 90 40 90 35 86 Z" fill="#A9BE9B"/>
+
+  <!-- badan kuncup: tiga kelopak bertumpuk -->
+  <path d="M35 8 C24 12 16 24 17 38 C18 50 26 57 35 58 C29 46 27 24 35 8 Z" fill="url(#bud-l)"/>
+  <path d="M35 8 C46 12 54 24 53 38 C52 50 44 57 35 58 C41 46 43 24 35 8 Z" fill="url(#bud-r)"/>
+  <path d="M35 10 C30 22 29 42 35 56 C41 42 40 22 35 10 Z" fill="url(#bud-c)"/>
+
+  <!-- sepal sage memeluk kuncup -->
+  <path d="M34 57 C24 54 17 44 18 33 C25 43 30 50 36 55 Z" fill="#A9BE9B"/>
+  <path d="M36 57 C46 54 53 44 52 33 C45 43 40 50 34 55 Z" fill="#8FA67E" opacity="0.92"/>
+  <path d="M27 57 C30 64 40 64 43 57 C38 61 32 61 27 57 Z" fill="#96AC86"/>
+</svg>

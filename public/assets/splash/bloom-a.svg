@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Mawar krem/ivory tampak atas, v2 "lebih hidup":
+       kelopak bezier 3 ring + gulungan tengah. Satu gradien radial
+       dipakai bersama sehingga tiap kelopak otomatis lebih gelap ke
+       arah pusat (kesan kedalaman), tepian kelopak diberi garis
+       tipis hangat sebagai pemisah. -->
+  <defs>
+    <radialGradient id="ba-halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"  stop-color="#EEDCC4" stop-opacity="0.5"/>
+      <stop offset="70%" stop-color="#F3E6D2" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#F6ECDD" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ba-depth" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"  stop-color="#D9B183"/>
+      <stop offset="26%" stop-color="#E8CDA4"/>
+      <stop offset="56%" stop-color="#F6E8CC"/>
+      <stop offset="100%" stop-color="#FFFEFB"/>
+    </radialGradient>
+    <radialGradient id="ba-core" cx="50%" cy="44%" r="66%">
+      <stop offset="0%"  stop-color="#E2C193"/>
+      <stop offset="100%" stop-color="#C49A6B"/>
+    </radialGradient>
+    <!-- tiga ukuran kelopak; digunakan ulang lewat <use> -->
+    <path id="ba-p1" d="M60 66 C44 60 37 44 40 26 C43 12 51 6 60 6
+                        C69 6 77 12 80 26 C83 44 76 60 60 66 Z"/>
+    <path id="ba-p2" d="M60 64 C49 59 44 47 46 33 C48 22 53 17 60 17
+                        C67 17 72 22 74 33 C76 47 71 59 60 64 Z"/>
+    <path id="ba-p3" d="M60 62 C52.5 58 49 49 50.5 39 C52 31 55 27.5 60 27.5
+                        C65 27.5 68 31 69.5 39 C71 49 67.5 58 60 62 Z"/>
+  </defs>
+
+  <circle cx="60" cy="60" r="58" fill="url(#ba-halo)"/>
+
+  <!-- ring luar: 9 kelopak -->
+  <g fill="url(#ba-depth)" stroke="#C9A87E" stroke-width="0.8" stroke-opacity="0.3">
+    <use href="#ba-p1" transform="rotate(3 60 60)"/>
+    <use href="#ba-p1" transform="rotate(42 60 60)"/>
+    <use href="#ba-p1" transform="rotate(79 60 60)"/>
+    <use href="#ba-p1" transform="rotate(121 60 60)"/>
+    <use href="#ba-p1" transform="rotate(158 60 60)"/>
+    <use href="#ba-p1" transform="rotate(202 60 60)"/>
+    <use href="#ba-p1" transform="rotate(239 60 60)"/>
+    <use href="#ba-p1" transform="rotate(281 60 60)"/>
+    <use href="#ba-p1" transform="rotate(322 60 60)"/>
+  </g>
+
+  <!-- ring tengah: 7 kelopak -->
+  <g fill="url(#ba-depth)" stroke="#C9A87E" stroke-width="0.8" stroke-opacity="0.38">
+    <use href="#ba-p2" transform="rotate(18 60 60)"/>
+    <use href="#ba-p2" transform="rotate(70 60 60)"/>
+    <use href="#ba-p2" transform="rotate(122 60 60)"/>
+    <use href="#ba-p2" transform="rotate(172 60 60)"/>
+    <use href="#ba-p2" transform="rotate(224 60 60)"/>
+    <use href="#ba-p2" transform="rotate(274 60 60)"/>
+    <use href="#ba-p2" transform="rotate(326 60 60)"/>
+  </g>
+
+  <!-- ring dalam: 5 kelopak -->
+  <g fill="url(#ba-depth)" stroke="#C9A87E" stroke-width="0.8" stroke-opacity="0.45">
+    <use href="#ba-p3" transform="rotate(40 60 60)"/>
+    <use href="#ba-p3" transform="rotate(112 60 60)"/>
+    <use href="#ba-p3" transform="rotate(184 60 60)"/>
+    <use href="#ba-p3" transform="rotate(256 60 60)"/>
+    <use href="#ba-p3" transform="rotate(328 60 60)"/>
+  </g>
+
+  <!-- gulungan tengah -->
+  <circle cx="60" cy="60" r="10.5" fill="url(#ba-core)"/>
+  <g fill="none" stroke="#A9834F" stroke-width="1.5" stroke-linecap="round" opacity="0.55">
+    <path d="M60 51.5 a8.5 8.5 0 1 1 -8.5 8.5"/>
+    <path d="M60 55 a5 5 0 1 0 5 5"/>
+    <path d="M60 57.8 a2.4 2.4 0 1 1 -2.4 2.4"/>
+  </g>
+</svg>

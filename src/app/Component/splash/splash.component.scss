@@ -3,15 +3,28 @@
 }
 
 /* ============================================================
-   Splash "Membuka Tirai" — porting 1:1 dari prototype yang sudah
-   disetujui: splash-curtain-preview.html (repo root).
+   Splash v3 "Gelombang Bunga" — porting 1:1 dari prototype yang
+   sudah disetujui: splash-flower-preview.html (repo root).
 
    Bedanya dengan prototype: tidak ada layer "panggung" — root-nya
    transparan, karena halaman undangan asli sudah ter-render di
-   belakang overlay ini dan itulah yang terungkap saat tirai terbuka.
+   belakang overlay ini dan itulah yang terungkap saat gelombang
+   bunga mundur keluar.
+
+   Timeline (1 beat = 968ms @ ~62 BPM), SEMUA delay absolut dari
+   saat .is-opening ditambahkan (freeze-able untuk QA):
+     0.00s   sapaan memudar
+     0.15s   gelombang menyapu masuk dari kiri-bawah (2 beat)
+     ~2.2s   scene love + quote fade-in (1 beat), tahan 6 beat
+     ~8.06s  scene memudar (0.75 beat)
+     8.85s   gelombang mundur keluar ke kiri-bawah (2 beat)
+             -> layar terbuka mulai dari kanan-atas
+     10.85s  .is-leaving (fade sisa overlay), 11.35s unmount
    ============================================================ */
 
 .splash-root {
+  --beat: 968ms;
+
   position: fixed;
   inset: 0;
   z-index: 10000;
@@ -33,144 +46,317 @@
 }
 
 /* ============================================================
-   Tirai — dua panel, digeser pakai translateX saja
-   (spec: jangan animasikan width/left)
+   Backdrop idle — wash ivory + cluster mawar dua sudut + taburan
    ============================================================ */
 
-.panel {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  /* persen (bukan vw!) supaya tetap benar saat splash dikurung
-     selebar kolom di desktop; overlap 0.5% menutup celah subpixel */
-  width: 50.5%;
-  z-index: 10;
-  will-change: transform;
-}
-
-.panel-left  { left: -0.25%; }
-.panel-right { right: -0.25%; }
-
-.curtain {
+.backdrop {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
+  z-index: 5;
+  background:
+    radial-gradient(120% 90% at 18% 85%, #F7E9E3 0%, rgba(247, 233, 227, 0) 55%),
+    radial-gradient(110% 85% at 82% 12%, #FBF3E7 0%, rgba(251, 243, 231, 0) 52%),
+    linear-gradient(135deg, #FFFDFB 0%, #FBF4EF 50%, #F7EBE4 100%);
+}
+
+.bd-cluster {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  pointer-events: none;
+
+  img {
+    position: absolute;
+    display: block;
+  }
+}
+
+.bd-bl { left: -36px; bottom: -36px; transform-origin: 0% 100%; }
+.bd-tr { right: -36px; top: -36px; transform: rotate(180deg); transform-origin: 50% 50%; }
+
+/* susunan satu cluster (dipakai dua kali; -tr diputar 180°) */
+.bd-cluster .c-leaf1   { left: -6px;  bottom: 8px;   width: 200px; transform: rotate(-8deg); }
+.bd-cluster .c-leaf2   { left: 130px; bottom: -4px;  width: 160px; transform: rotate(38deg) scaleY(-1); }
+.bd-cluster .c-leaf3   { left: 30px;  bottom: 128px; width: 120px; transform: rotate(-58deg); }
+.bd-cluster .c-bloom1  { left: 8px;   bottom: 16px;  width: 160px; }
+.bd-cluster .c-bloom2  { left: 126px; bottom: 96px;  width: 110px; }
+.bd-cluster .c-bloom3  { left: 224px; bottom: 20px;  width: 92px;  opacity: .96; }
+.bd-cluster .c-bud     { left: 216px; bottom: 104px; width: 60px;  transform: rotate(34deg); }
+.bd-cluster .c-blossom1{ left: 104px; bottom: 176px; width: 56px;  transform: rotate(16deg); }
+.bd-cluster .c-blossom2{ left: 250px; bottom: 118px; width: 44px;  transform: rotate(-26deg); opacity: .9; }
+.bd-cluster .c-petal1  { left: 210px; bottom: 180px; width: 34px;  transform: rotate(120deg); opacity: .85; }
+.bd-cluster .c-petal2  { left: 110px; bottom: 244px; width: 26px;  transform: rotate(-40deg); opacity: .7; }
+.bd-cluster .c-petal3  { left: 296px; bottom: 60px;  width: 24px;  transform: rotate(66deg);  opacity: .75; }
+
+/* taburan bunga samar (posisi/opacity dari TS) */
+.bd-scatter {
+  position: absolute;
   display: block;
+  pointer-events: none;
+}
+
+/* goyangan halus 4 ketukan saat idle */
+@keyframes bd-sway {
+  from { rotate: -1.6deg; }
+  to   { rotate: 1.2deg; }
+}
+
+.splash-root:not(.is-opening) .bd-bl { animation: bd-sway calc(var(--beat) * 4) ease-in-out infinite alternate; }
+.splash-root:not(.is-opening) .bd-tr { animation: bd-sway calc(var(--beat) * 4) ease-in-out infinite alternate calc(var(--beat) * -2); }
+
+/* ============================================================
+   Lembar gelombang bunga — 220% dengan tepi diagonal terpotong;
+   digeser pakai translate3d SAJA (spec: jangan animasikan
+   width/left; persen relatif lembar, aman untuk kolom 430px)
+   ============================================================ */
+
+.wave {
+  position: absolute;
+  z-index: 30;
+  left: -60%;
+  top: -60%;
+  width: 220%;
+  height: 220%;
+  will-change: transform;
+  /* idle: parkir di luar layar kiri-bawah */
+  transform: translate3d(-62%, 62%, 0);
+  pointer-events: none;
+}
+
+.wave-fill {
+  position: absolute;
+  inset: 0;
+  /* tepi depan = garis (62%,0)->(100%,38%); garland menutup garis lurusnya */
+  clip-path: polygon(0 0, 62% 0, 100% 38%, 100% 100%, 0 100%);
+  background:
+    linear-gradient(to top right, rgba(216, 167, 177, 0) 55%, rgba(216, 167, 177, .14) 74%, rgba(216, 167, 177, .3) 100%),
+    radial-gradient(52% 40% at 30% 72%, rgba(247, 233, 227, .9) 0%, rgba(247, 233, 227, 0) 70%),
+    radial-gradient(46% 38% at 68% 30%, rgba(251, 243, 231, .9) 0%, rgba(251, 243, 231, 0) 68%),
+    radial-gradient(40% 34% at 50% 52%, rgba(244, 232, 228, .8) 0%, rgba(244, 232, 228, 0) 70%),
+    linear-gradient(135deg, #FFFDFB 0%, #FAF0EA 45%, #F5E5DD 100%);
+
+  /* tekstur bunga samar & ladang statis (ikut ter-clip) */
+  img.tx,
+  img.fx {
+    position: absolute;
+    display: block;
+  }
+}
+
+/* item bunga hidup: wrapper diposisikan, img di dalam yang ber-wobble
+   (dipakai garland tepi + sebagian bunga ladang) */
+.g-item {
+  position: absolute;
+  translate: -50% -50%;
+
+  img {
+    display: block;
+    width: 100%;
+    animation: bloom-wobble calc(var(--beat) * 4) ease-in-out var(--wd) infinite alternate;
+  }
+}
+
+@keyframes bloom-wobble {
+  from { transform: rotate(var(--r)) scale(1); }
+  to   { transform: rotate(calc(var(--r) + 5deg)) scale(1.05); }
 }
 
 /* ============================================================
-   Bingkai foto oval/arch — menempel di tengah panel,
-   ikut tersapu keluar bersama tirai
+   Scene "Selamat Datang" — love kelopak + foto + quote
    ============================================================ */
 
-.photo-frame {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  width: clamp(112px, 17vw, 196px);
-  aspect-ratio: 3 / 4.3;
-  z-index: 2;
-}
-
-.frame-inner {
+.scene {
   position: absolute;
   inset: 0;
-  border-radius: 999px 999px 16px 16px; /* arch: atas melengkung penuh */
-  background:
-    radial-gradient(circle at 50% 30%, #fff 0%, var(--color-ivory) 55%, #F4E8E4 100%);
-  border: 1px solid var(--color-gold);
-  box-shadow:
-    0 0 0 5px rgba(255, 253, 251, 0.8),
-    0 0 0 6px var(--color-gold-soft),
-    0 14px 34px rgba(59, 49, 56, 0.16),
-    0 0 30px rgba(232, 212, 160, 0.45);
-  overflow: hidden;
-  transform: rotate(-1.2deg);
-}
-
-.frame-right .frame-inner {
-  transform: rotate(1.2deg);
-}
-
-/* placeholder di bawah; foto asli menimpanya kalau file-nya ada */
-.placeholder {
-  position: absolute;
-  inset: 0;
+  z-index: 40;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: clamp(.6rem, 1.8vh, 1.1rem);
   text-align: center;
-  padding: 0 0.6rem;
-  outline: 1.5px dashed rgba(212, 175, 55, 0.75);
-  outline-offset: -9px;
-  border-radius: inherit;
+  padding: 1.2rem 1.5rem;
+  opacity: 0;
+  pointer-events: none;
 
-  svg {
-    width: 46%;
-    opacity: 0.8;
-    margin-bottom: 0.1rem;
+  /* scrim ivory lembut di tengah: ladang bunga di belakang tetap
+     terlihat penuh di pinggir, teks & foto tetap terbaca di tengah */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(74% 56% at 50% 46%,
+      rgba(255, 253, 251, .96) 0%,
+      rgba(255, 253, 251, .9) 32%,
+      rgba(255, 253, 251, .55) 60%,
+      rgba(255, 253, 251, .12) 84%,
+      rgba(255, 253, 251, 0) 100%);
   }
 
-  strong {
-    font-family: Inter, system-ui, sans-serif;
-    font-size: clamp(0.56rem, 1.3vw, 0.72rem);
-    letter-spacing: 0.18em;
+  .welcome {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.1rem, 7vw, 2.9rem);
     color: var(--color-rose-dark);
+    text-shadow: 0 1px 10px rgba(255, 255, 255, .7);
   }
 
-  small {
+  .quote {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(.92rem, 3.4vw, 1.12rem);
+    line-height: 1.65;
+    max-width: 36ch;
+    color: var(--color-ink);
+    text-shadow:
+      0 0 6px rgba(255, 253, 251, .95),
+      0 0 14px rgba(255, 253, 251, .8);
+  }
+
+  .qs {
     font-family: Inter, system-ui, sans-serif;
-    font-size: clamp(0.5rem, 1.1vw, 0.6rem);
-    line-height: 1.5;
-    color: var(--color-muted);
-  }
-
-  .file {
-    display: block;
-    margin-top: 0.15rem;
-    font-size: 0.92em;
-    color: var(--color-gold);
-    word-break: break-all;
+    font-size: .62rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    text-shadow:
+      0 0 6px rgba(255, 253, 251, .95),
+      0 0 12px rgba(255, 253, 251, .85);
   }
 }
 
-.frame-inner img {
+/* --- love: foto ter-clip hati + dua lapis wreath kelopak --- */
+
+.heart-wrap {
+  position: relative;
+  width: min(74vw, 300px, 46vh);
+  aspect-ratio: 100 / 92;
+  flex: none;
+}
+
+.heart-photo {
+  position: absolute;
+  inset: 6.5%;
+  width: 87%;
+  height: 87%;
+  display: block;
+  filter: drop-shadow(0 12px 26px rgba(59, 49, 56, .2));
+
+  image {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
+.heart-petals {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
 }
 
-/* label kecil "menarik tirai →" di atas bingkai */
-.pull-hint {
+.hp {
   position: absolute;
-  left: 50%;
-  translate: -50% 0;
-  bottom: calc(100% + 0.55rem);
-  white-space: nowrap;
-  font-family: Inter, system-ui, sans-serif;
-  font-size: clamp(0.52rem, 1.1vw, 0.64rem);
-  letter-spacing: 0.14em;
-  color: var(--color-rose-dark);
-  opacity: 0.85;
+
+  img {
+    display: block;
+    width: 100%;
+    transform: scale(.96);
+  }
 }
 
-/* goyangan halus saat idle (tirai masih tertutup) */
-@keyframes sway-l { from { transform: rotate(-1.5deg); } to { transform: rotate(-0.3deg); } }
-@keyframes sway-r { from { transform: rotate(1.5deg); }  to { transform: rotate(0.3deg); }  }
+@keyframes petal-breathe {
+  from { transform: scale(.9); }
+  to   { transform: scale(1.1); }
+}
 
-.splash-root:not(.is-opening) .frame-left  .frame-inner { animation: sway-l 5.5s ease-in-out infinite alternate; }
-.splash-root:not(.is-opening) .frame-right .frame-inner { animation: sway-r 5.5s ease-in-out infinite alternate 0.8s; }
+@keyframes heart-kenburns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.05); }
+}
+
+/* kelopak lepas yang melayang di scene */
+.sc-petal {
+  position: absolute;
+  top: -12vh;
+  will-change: transform;
+  animation: sc-fall var(--fd) linear var(--fdel) infinite;
+
+  img {
+    display: block;
+    width: 100%;
+    animation: sc-sway var(--sd) ease-in-out var(--fdel) infinite alternate;
+  }
+}
+
+@keyframes sc-fall {
+  from { transform: translateY(0)     rotate(var(--r0)); }
+  to   { transform: translateY(124vh) rotate(calc(var(--r0) + 280deg)); }
+}
+
+@keyframes sc-sway {
+  from { translate: calc(var(--amp) * -1) 0; }
+  to   { translate: var(--amp) 0; }
+}
+
+/* aksen cluster di sudut scene */
+.sc-cluster {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  opacity: .94;
+  pointer-events: none;
+
+  img {
+    position: absolute;
+    display: block;
+  }
+}
+
+.sc-bl { left: -22px; bottom: -22px; }
+.sc-tr { right: -22px; top: -22px; }
+
+.sc-bl .s-leaf    { left: 0;     bottom: 4px;   width: 140px; transform: rotate(-10deg); }
+.sc-bl .s-leaf2   { left: 76px;  bottom: -10px; width: 112px; transform: rotate(30deg) scaleY(-1); }
+.sc-bl .s-bloom   { left: 10px;  bottom: 10px;  width: 102px; }
+.sc-bl .s-bloom2  { left: 98px;  bottom: 66px;  width: 64px;  opacity: .96; }
+.sc-bl .s-bloom3  { left: 168px; bottom: 14px;  width: 52px;  opacity: .94; }
+.sc-bl .s-bud     { left: 112px; bottom: 6px;   width: 46px;  transform: rotate(30deg); }
+.sc-bl .s-blossom { left: 38px;  bottom: 116px; width: 46px;  transform: rotate(14deg); }
+.sc-bl .s-blossom2{ left: 160px; bottom: 112px; width: 34px;  transform: rotate(58deg); opacity: .9; }
+.sc-bl .s-petal   { left: 150px; bottom: 158px; width: 20px;  transform: rotate(100deg); opacity: .8; }
+.sc-bl .s-petal2  { left: 206px; bottom: 74px;  width: 18px;  transform: rotate(-30deg); opacity: .75; }
+
+.sc-tr .s-leaf    { right: 0;     top: 4px;   width: 140px; transform: rotate(172deg); }
+.sc-tr .s-leaf2   { right: 76px;  top: -10px; width: 112px; transform: rotate(210deg) scaleY(-1); }
+.sc-tr .s-bloom   { right: 10px;  top: 10px;  width: 102px; }
+.sc-tr .s-bloom2  { right: 98px;  top: 66px;  width: 64px;  opacity: .96; }
+.sc-tr .s-bloom3  { right: 168px; top: 14px;  width: 52px;  opacity: .94; }
+.sc-tr .s-bud     { right: 112px; top: 6px;   width: 46px;  transform: rotate(212deg); }
+.sc-tr .s-blossom { right: 38px;  top: 116px; width: 46px;  transform: rotate(194deg); }
+.sc-tr .s-blossom2{ right: 160px; top: 112px; width: 34px;  transform: rotate(238deg); opacity: .9; }
+.sc-tr .s-petal   { right: 150px; top: 158px; width: 20px;  transform: rotate(280deg); opacity: .8; }
+.sc-tr .s-petal2  { right: 206px; top: 74px;  width: 18px;  transform: rotate(150deg); opacity: .75; }
+
+/* sprig kecil di sisi kiri/kanan scene */
+.sc-side {
+  position: absolute;
+  width: 82px;
+  opacity: .85;
+  pointer-events: none;
+}
+
+/* kilau emas kecil di sekitar hati */
+.sc-spark {
+  position: absolute;
+  fill: var(--color-gold-soft);
+}
+
+@keyframes twinkle {
+  from { opacity: .95; }
+  to   { opacity: .25; }
+}
 
 /* ============================================================
-   Sapaan + tombol di atas tirai tertutup
+   Sapaan + tombol di atas backdrop
    ============================================================ */
 
 .content {
@@ -185,7 +371,6 @@
   padding: 0 1.5rem;
 }
 
-/* Teks gelap: tirainya kini ivory (terang), teks putih tak terbaca */
 .content .script {
   font-family: 'Great Vibes', cursive;
   font-size: clamp(2rem, 6vw, 3rem);
@@ -243,31 +428,8 @@
   }
 }
 
-/* Layout "sempit": bingkai foto turun ke bawah panel supaya tidak
-   menabrak teks sapaan; sapaan naik ke sepertiga atas.
-   Berlaku saat viewport-nya sempit (<900px) DAN saat desktop >=1024px —
-   karena di desktop splash dikurung selebar kolom HP. */
-@media (max-width: 899px), (min-width: 1024px) {
-  .photo-frame {
-    top: auto;
-    bottom: 9%;
-    translate: -50% 0;
-    width: clamp(96px, 24vw, 150px);
-  }
-
-  .content {
-    justify-content: flex-start;
-    padding-top: max(12vh, 70px);
-  }
-}
-
 /* ============================================================
-   Koreografi — dipicu class .is-opening (timeline ~2.5s):
-     0.00s     sapaan memudar
-     0.25s     tirai mulai bergeser
-     0.9-1.3s  plateau ±20% terbuka — "momen" foto terlihat menarik tirai
-     1.3-2.5s  tirai menyapu keluar layar, foto ikut terbawa
-     2.55s     .is-leaving (fade sisa overlay), 3.05s unmount
+   Koreografi — dipicu class .is-opening; delay ABSOLUT semua
    ============================================================ */
 
 @keyframes fade-out {
@@ -279,60 +441,90 @@
   pointer-events: none;
 }
 
-.is-opening .pull-hint {
-  animation: fade-out 1.6s ease 0.9s forwards;
+/* backdrop disembunyikan diam-diam begitu tertutup gelombang,
+   supaya saat gelombang mundur yang terungkap halaman undangan */
+.is-opening .backdrop {
+  animation: fade-out 0.25s ease 2.1s forwards;
 }
 
-@keyframes sweep-left {
-  0%   { transform: translateX(0);     animation-timing-function: cubic-bezier(0.6, 0.05, 0.35, 1); }
-  38%  { transform: translateX(-18%);  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
-  56%  { transform: translateX(-22%);  animation-timing-function: cubic-bezier(0.6, 0.05, 0.25, 1); }
-  100% { transform: translateX(-108%); }
+@keyframes wave-in {
+  from { transform: translate3d(-62%, 62%, 0); }
+  to   { transform: translate3d(0, 0, 0); }
 }
 
-@keyframes sweep-right {
-  0%   { transform: translateX(0);     animation-timing-function: cubic-bezier(0.6, 0.05, 0.35, 1); }
-  38%  { transform: translateX(18%);   animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
-  56%  { transform: translateX(22%);   animation-timing-function: cubic-bezier(0.6, 0.05, 0.25, 1); }
-  100% { transform: translateX(108%); }
+@keyframes wave-out {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-62%, 62%, 0); }
 }
 
-.is-opening .panel-left  { animation: sweep-left  2.25s 0.25s forwards; }
-.is-opening .panel-right { animation: sweep-right 2.25s 0.25s forwards; }
-
-/* bingkai ikut "condong" seolah menarik tirai, lalu terbawa keluar */
-@keyframes ride-left {
-  0%   { transform: rotate(-1.2deg); }
-  38%  { transform: rotate(2.6deg); }
-  56%  { transform: rotate(1.8deg); }
-  100% { transform: rotate(-3.5deg); }
+/* wave-out TANPA fill backwards — selama delay, wave-in forwards yang pegang */
+.is-opening .wave {
+  animation:
+    wave-in  1.936s cubic-bezier(.5, .05, .3, 1) .15s both,
+    wave-out 1.936s cubic-bezier(.55, .02, .5, .9) 8.85s forwards;
 }
 
-@keyframes ride-right {
-  0%   { transform: rotate(1.2deg); }
-  38%  { transform: rotate(-2.6deg); }
-  56%  { transform: rotate(-1.8deg); }
-  100% { transform: rotate(3.5deg); }
+@keyframes scene-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-.is-opening .frame-left  .frame-inner { animation: ride-left  2.25s 0.25s forwards; }
-.is-opening .frame-right .frame-inner { animation: ride-right 2.25s 0.25s forwards; }
+.is-opening .scene {
+  animation:
+    scene-in .968s ease-out 2.25s forwards,
+    fade-out .726s ease     8.058s forwards;
+}
+
+@keyframes rise-in {
+  from { opacity: 0; translate: 0 14px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.scene .welcome,
+.scene .quote,
+.scene .qs {
+  opacity: 0;
+}
+
+.is-opening .scene .welcome { animation: rise-in .968s ease-out 2.4s both; }
+.is-opening .scene .quote   { animation: rise-in .968s ease-out 2.75s both; }
+.is-opening .scene .qs      { animation: rise-in .968s ease-out 3s both; }
+
+/* kelopak love "bernapas" 4 beat, ber-stagger lewat --d */
+.is-opening .hp img {
+  animation: petal-breathe calc(var(--beat) * 4) ease-in-out calc(2.25s + var(--d)) infinite alternate;
+}
+
+/* foto: Ken Burns sangat halus selama fase tahan */
+.is-opening .heart-photo image {
+  animation: heart-kenburns 6.5s ease-in-out 2.25s forwards;
+}
+
+.is-opening .sc-spark {
+  animation: twinkle calc(var(--beat) * 2) ease-in-out var(--td) infinite alternate;
+}
 
 /* ============================================================
    Accessibility: skip the show, reveal langsung.
 
    Sengaja HANYA lewat class .reduce (di-set dari TS), tanpa blok
    @media (prefers-reduced-motion) di CSS — supaya override "?motion"
-   di URL bisa memaksa animasi jalan di mesin dev yang Windows-nya
-   mematikan "Show animations". Preferensi tamu tetap dihormati
-   karena TS membaca matchMedia yang sama.
+   di URL bisa memaksa animasi jalan di mesin dev. Preferensi tamu
+   tetap dihormati karena TS membaca matchMedia yang sama.
    ============================================================ */
 
 .reduce {
-  .panel,
-  .frame-inner,
+  .backdrop,
+  .bd-cluster,
+  .wave,
+  .g-item img,
+  .scene,
+  .hp img,
+  .sc-petal,
+  .sc-petal img,
+  .sc-spark,
+  .heart-photo image,
   .content,
-  .pull-hint,
   &.splash-root {
     transition: none !important;
     animation: none !important;

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 100">
+  <!-- Ranting daun sage — selang-seling hijau sage & sage-kelabu
+       (mengikuti daun kelabu-kebiruan di artwork referensi). -->
+  <defs>
+    <radialGradient id="lf-sage" cx="35%" cy="40%" r="80%">
+      <stop offset="0%"  stop-color="#C9D6BC"/>
+      <stop offset="100%" stop-color="#98AD8A"/>
+    </radialGradient>
+    <radialGradient id="lf-deep" cx="35%" cy="40%" r="80%">
+      <stop offset="0%"  stop-color="#AEC29F"/>
+      <stop offset="100%" stop-color="#7F9670"/>
+    </radialGradient>
+    <radialGradient id="lf-grey" cx="35%" cy="40%" r="80%">
+      <stop offset="0%"  stop-color="#BFCBC4"/>
+      <stop offset="100%" stop-color="#8FA39B"/>
+    </radialGradient>
+  </defs>
+
+  <!-- batang -->
+  <path d="M10 92 C46 76 84 50 140 16" fill="none" stroke="#8FA67E" stroke-width="2.4" stroke-linecap="round"/>
+
+  <!-- daun: path lancip, bergantian sisi atas/bawah batang -->
+  <g>
+    <path d="M0 0 C7 -8 20 -9 30 -1 C20 8 7 7 0 0 Z" fill="url(#lf-sage)" transform="translate(30 82) rotate(-86)"/>
+    <path d="M0 0 C7 -8 20 -9 30 -1 C20 8 7 7 0 0 Z" fill="url(#lf-deep)" transform="translate(45 72) rotate(6)"/>
+    <path d="M0 0 C7 -8 20 -9 30 -1 C20 8 7 7 0 0 Z" fill="url(#lf-grey)" transform="translate(62 60) rotate(-80)"/>
+    <path d="M0 0 C7 -8 20 -9 30 -1 C20 8 7 7 0 0 Z" fill="url(#lf-sage)" transform="translate(79 50) rotate(2)"/>
+    <path d="M0 0 C7 -8 20 -9 30 -1 C20 8 7 7 0 0 Z" fill="url(#lf-deep)" transform="translate(96 38) rotate(-76)"/>
+    <path d="M0 0 C7 -8 20 -9 30 -1 C20 8 7 7 0 0 Z" fill="url(#lf-grey)" transform="translate(112 28) rotate(-2) scale(0.82)"/>
+    <path d="M0 0 C7 -8 20 -9 30 -1 C20 8 7 7 0 0 Z" fill="url(#lf-sage)" transform="translate(134 15) rotate(-38) scale(0.72)"/>
+  </g>
+</svg>

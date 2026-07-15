@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 56">
+  <!-- Kelopak mawar tunggal — dipakai untuk formasi love,
+       garland tepi gelombang, dan tekstur watercolor. -->
+  <defs>
+    <radialGradient id="pt" cx="50%" cy="32%" r="82%">
+      <stop offset="0%"  stop-color="#FBEFEC"/>
+      <stop offset="48%" stop-color="#F0D5D9"/>
+      <stop offset="100%" stop-color="#DCAEB8"/>
+    </radialGradient>
+  </defs>
+
+  <path d="M22 52 C10 44 4 32 5 20 C6 9 13 3 22 4 C31 3 38 9 39 20 C40 32 34 44 22 52 Z"
+        fill="url(#pt)"/>
+  <!-- urat halus -->
+  <path d="M22 49 C20.5 38 20.5 24 22 10" fill="none" stroke="#C98F9B" stroke-width="1.1"
+        stroke-linecap="round" opacity="0.35"/>
+</svg>

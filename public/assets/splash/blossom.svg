@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <!-- Bunga kecil 5 kelopak — filler untuk meramaikan komposisi
+       (garland, scatter backdrop, aksen scene). -->
+  <defs>
+    <radialGradient id="bs-p" cx="50%" cy="30%" r="80%">
+      <stop offset="0%"  stop-color="#FFFDF8"/>
+      <stop offset="55%" stop-color="#F7E6DC"/>
+      <stop offset="100%" stop-color="#EBC9C6"/>
+    </radialGradient>
+    <radialGradient id="bs-c" cx="50%" cy="40%" r="70%">
+      <stop offset="0%"  stop-color="#EFDDAE"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </radialGradient>
+  </defs>
+
+  <g>
+    <ellipse cx="30" cy="14.5" rx="10" ry="13.5" fill="url(#bs-p)" opacity="0.97"/>
+    <ellipse cx="30" cy="14.5" rx="10" ry="13.5" fill="url(#bs-p)" opacity="0.95" transform="rotate(72 30 30)"/>
+    <ellipse cx="30" cy="14.5" rx="10" ry="13.5" fill="url(#bs-p)" opacity="0.97" transform="rotate(144 30 30)"/>
+    <ellipse cx="30" cy="14.5" rx="10" ry="13.5" fill="url(#bs-p)" opacity="0.95" transform="rotate(216 30 30)"/>
+    <ellipse cx="30" cy="14.5" rx="10" ry="13.5" fill="url(#bs-p)" opacity="0.97" transform="rotate(288 30 30)"/>
+  </g>
+
+  <circle cx="30" cy="30" r="6" fill="url(#bs-c)"/>
+  <g fill="#B98F62" opacity="0.6">
+    <circle cx="27.4" cy="28.2" r="0.9"/>
+    <circle cx="32.4" cy="28.6" r="0.9"/>
+    <circle cx="30" cy="32.4" r="0.9"/>
+  </g>
+</svg>
