@@ -1,0 +1,98 @@
+:host {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ===== mode fly (Story) =====
+   Lane membentang selebar section; karena translateX pakai % lebar
+   lane sendiri, burung menyeberang penuh dengan transform-only. */
+.lane {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  animation: sweep 21s linear infinite;
+  animation-play-state: paused;
+}
+
+.lane-1 { top: 12%; }
+.lane-2 { top: 22%; animation-duration: 26s; animation-delay: 8s; }
+
+@keyframes sweep {
+  0%   { transform: translateX(-10%); opacity: 0; }
+  6%   { opacity: 0.4; }
+  92%  { opacity: 0.4; }
+  100% { transform: translateX(104%); opacity: 0; }
+}
+
+.bird {
+  width: 26px;
+  height: auto;
+  fill: none;
+  stroke: #8B7B82;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  animation: bob 3.9s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+
+.bird-small {
+  width: 19px;
+  stroke: #B8848F;
+  animation-delay: 1.4s;
+}
+
+/* naik-turun halus + "kepak" via scaleY */
+@keyframes bob {
+  from { transform: translateY(0)   scaleY(1); }
+  50%  { transform: translateY(-7px) scaleY(0.82); }
+  to   { transform: translateY(-2px) scaleY(1); }
+}
+
+/* ===== mode perch (Footer) ===== */
+.perch {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  translate: -50% 0;
+  width: 68px;
+  opacity: 0.85;
+}
+
+.sitting {
+  display: block;
+  animation: perch-bob 7.8s ease-in-out infinite alternate;
+  animation-play-state: paused;
+  transform-origin: 50% 100%;
+}
+
+@keyframes perch-bob {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-2px); }
+}
+
+/* satu kerlip pelan di atas pasangan burung (reprise motif embun) */
+.spark {
+  position: absolute;
+  top: -14px;
+  right: -8px;
+  width: 10px;
+  height: 10px;
+  opacity: 0;
+  animation: spark-twinkle 5.8s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+@keyframes spark-twinkle {
+  0%, 100% { opacity: 0;   transform: scale(0.6); }
+  50%      { opacity: 0.6; transform: scale(1); }
+}
+
+:host(.is-live) .lane,
+:host(.is-live) .bird,
+:host(.is-live) .sitting,
+:host(.is-live) .spark {
+  animation-play-state: running;
+}

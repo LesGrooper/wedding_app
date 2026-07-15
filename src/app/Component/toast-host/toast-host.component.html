@@ -1,0 +1,21 @@
+<div
+  class="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 pointer-events-none"
+  role="status"
+  aria-live="polite"
+>
+  @for (t of toast.stream$ | async; track t.id) {
+    <div
+      class="pointer-events-auto px-5 py-3 rounded-full text-sm shadow-soft border backdrop-blur-md"
+      [class.bg-ivory]="t.kind === 'success'"
+      [class.text-ink]="t.kind === 'success'"
+      [class.border-gold]="t.kind === 'success'"
+      [class.bg-rose]="t.kind === 'warning'"
+      [class.text-white]="t.kind === 'warning' || t.kind === 'danger'"
+      [class.border-rose-dark]="t.kind === 'warning'"
+      [class.bg-rose-dark]="t.kind === 'danger'"
+      (click)="toast.dismiss(t.id)"
+    >
+      {{ t.message }}
+    </div>
+  }
+</div>

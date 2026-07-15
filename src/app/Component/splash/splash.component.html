@@ -1,0 +1,83 @@
+<div
+  class="splash-root"
+  [class.is-opening]="opening"
+  [class.is-leaving]="leaving"
+  [class.reduce]="reducedMotion"
+>
+  <!--
+    Tidak ada "panggung" tiruan di sini: halaman undangan asli sudah
+    ter-render di belakang overlay ini, jadi saat tirai menyapu keluar,
+    yang terungkap adalah hero section sungguhan.
+  -->
+
+  <!-- Tirai kiri + bingkai foto yang ikut bergerak bersamanya -->
+  <div class="panel panel-left" aria-hidden="true">
+    <img class="curtain" src="assets/splash/curtain-left.svg" alt="" />
+
+    <figure class="photo-frame frame-left">
+      <span class="pull-hint">menarik tirai &rarr;</span>
+      <div class="frame-inner">
+        <div class="placeholder">
+          <!-- siluet sederhana kepala + bahu -->
+          <svg viewBox="0 0 100 100" fill="#8B7B82" opacity="0.4">
+            <circle cx="50" cy="34" r="18" />
+            <path d="M14,92 C14,66 30,56 50,56 C70,56 86,66 86,92 Z" />
+          </svg>
+          <strong>FOTO KAMU</strong>
+          <small>taruh di
+            <span class="file">public/assets/splash/splash-photo-left.jpg</span>
+          </small>
+        </div>
+        <img src="assets/splash/splash-photo-left.jpg" alt="" (error)="hidePhoto($event)" />
+      </div>
+    </figure>
+  </div>
+
+  <!-- Tirai kanan (aset sudah berbentuk mirror, seam emas di sisi dalam) -->
+  <div class="panel panel-right" aria-hidden="true">
+    <img class="curtain" src="assets/splash/curtain-right.svg" alt="" />
+
+    <figure class="photo-frame frame-right">
+      <span class="pull-hint">&larr; menarik tirai</span>
+      <div class="frame-inner">
+        <div class="placeholder">
+          <svg viewBox="0 0 100 100" fill="#8B7B82" opacity="0.4">
+            <circle cx="50" cy="34" r="18" />
+            <path d="M14,92 C14,66 30,56 50,56 C70,56 86,66 86,92 Z" />
+          </svg>
+          <strong>FOTO PASANGAN</strong>
+          <small>taruh di
+            <span class="file">public/assets/splash/splash-photo-right.jpg</span>
+          </small>
+        </div>
+        <img src="assets/splash/splash-photo-right.jpg" alt="" (error)="hidePhoto($event)" />
+      </div>
+    </figure>
+  </div>
+
+  <!-- Sapaan + tombol, tampil di atas tirai yang tertutup -->
+  <div class="content">
+    <p class="script animate-fade-in opacity-0" style="animation-delay: 0.1s">
+      The Wedding of
+    </p>
+
+    <p class="kepada animate-fade-in opacity-0" style="animation-delay: 0.6s">
+      Kepada Yth.
+    </p>
+    <h2 class="guest animate-fade-in opacity-0" style="animation-delay: 0.85s">
+      {{ (guestService.currentGuest$ | async)?.name || 'Tamu Undangan' }}
+    </h2>
+    <p class="apology animate-fade-in opacity-0" style="animation-delay: 1.05s">
+      Mohon maaf apabila ada salah penulisan nama
+    </p>
+
+    <button
+      type="button"
+      class="btn-open animate-fade-in opacity-0"
+      style="animation-delay: 1.4s"
+      (click)="open()"
+    >
+      Buka Undangan
+    </button>
+  </div>
+</div>

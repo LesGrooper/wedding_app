@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hills {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: clamp(60px, 12%, 110px);
+}
+
+/* Ayunan lonceng: 3.9s = 4 ketukan @ ~62 BPM, origin di gantungan */
+.bell {
+  position: absolute;
+  top: 4%;
+  width: 22px;
+  height: auto;
+  opacity: 0.55;
+  transform-origin: 50% 0;
+  animation: bell-swing 3.9s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+
+.bell-left  { left: 8%; }
+.bell-right { right: 8%; animation-delay: 1.95s; }
+
+@keyframes bell-swing {
+  from { transform: rotate(-6deg); }
+  to   { transform: rotate(6deg); }
+}
+
+:host(.is-live) .bell {
+  animation-play-state: running;
+}

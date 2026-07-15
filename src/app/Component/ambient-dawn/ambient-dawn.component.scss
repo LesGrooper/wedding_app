@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* Berkas cahaya fajar: kolom gradient miring, hanya opacity yang
+   dianimasikan. Durasi 11.7s = 12 ketukan @ ~62 BPM lagu. */
+.ray {
+  position: absolute;
+  top: -12%;
+  height: 130%;
+  width: 22%;
+  transform: skewX(-14deg);
+  background: linear-gradient(180deg, rgba(232, 212, 160, 0.35), rgba(232, 212, 160, 0) 70%);
+  opacity: 0.05;
+  animation: ray-pulse 11.7s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.ray-1 { left: 6%; }
+.ray-2 { left: 38%; width: 15%; animation-delay: 3.9s; }
+.ray-3 { left: 68%; animation-delay: 7.8s; }
+
+@keyframes ray-pulse {
+  0%, 100% { opacity: 0.05; }
+  50%      { opacity: 0.16; }
+}
+
+/* Kerlip embun emas (bintang 4 titik yang sama dengan splash).
+   5.8s = 6 ketukan. */
+.dew {
+  position: absolute;
+  fill: #E8D4A0;
+  opacity: 0;
+  animation: dew-twinkle 5.8s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+@keyframes dew-twinkle {
+  0%, 100% { opacity: 0;    transform: scale(0.6); }
+  50%      { opacity: 0.5;  transform: scale(1); }
+}
+
+:host(.is-live) .ray,
+:host(.is-live) .dew {
+  animation-play-state: running;
+}

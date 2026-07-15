@@ -1,0 +1,21 @@
+<section class="section text-center">
+  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>Counting the Days</p>
+  <div class="w-16 h-px bg-gold mx-auto mb-3" appReveal></div>
+  <p class="text-sm text-muted mb-10" appReveal>
+    {{ eventDate | formatDate: 'EEEE, d MMMM yyyy' }}
+  </p>
+
+  <div class="glass px-6 py-8 @md:px-10 @md:py-10 inline-block" appReveal>
+    <!-- "bernapas" seirama tempo lagu (~62 BPM); animasi transform di
+         grid DALAM kartu, bukan di kartu ber-appReveal (jangan bentrok
+         dengan transition reveal) -->
+    <div class="grid grid-cols-4 gap-4 @md:gap-8 breathe" appAmbientLive>
+      @for (cell of cells(tick$ | async); track cell.label) {
+        <div>
+          <p class="font-serif text-4xl @md:text-6xl text-ink leading-none">{{ pad(cell.value) }}</p>
+          <p class="mt-2 text-[10px] @md:text-xs uppercase tracking-[0.25em] text-muted">{{ cell.label }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

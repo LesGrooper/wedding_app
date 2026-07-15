@@ -1,0 +1,340 @@
+:host {
+  display: contents;
+}
+
+/* ============================================================
+   Splash "Membuka Tirai" — porting 1:1 dari prototype yang sudah
+   disetujui: splash-curtain-preview.html (repo root).
+
+   Bedanya dengan prototype: tidak ada layer "panggung" — root-nya
+   transparan, karena halaman undangan asli sudah ter-render di
+   belakang overlay ini dan itulah yang terungkap saat tirai terbuka.
+   ============================================================ */
+
+.splash-root {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  background: transparent;
+  transition: opacity 500ms ease-out;
+
+  /* Desktop: splash hanya menutupi kolom undangan di kiri —
+     panel foto prewedding di kanan tetap terlihat sejak awal. */
+  @media (min-width: 1024px) {
+    right: auto;
+    width: var(--invite-col-w);
+  }
+
+  &.is-leaving {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* ============================================================
+   Tirai — dua panel, digeser pakai translateX saja
+   (spec: jangan animasikan width/left)
+   ============================================================ */
+
+.panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* persen (bukan vw!) supaya tetap benar saat splash dikurung
+     selebar kolom di desktop; overlap 0.5% menutup celah subpixel */
+  width: 50.5%;
+  z-index: 10;
+  will-change: transform;
+}
+
+.panel-left  { left: -0.25%; }
+.panel-right { right: -0.25%; }
+
+.curtain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+}
+
+/* ============================================================
+   Bingkai foto oval/arch — menempel di tengah panel,
+   ikut tersapu keluar bersama tirai
+   ============================================================ */
+
+.photo-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: clamp(112px, 17vw, 196px);
+  aspect-ratio: 3 / 4.3;
+  z-index: 2;
+}
+
+.frame-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px 999px 16px 16px; /* arch: atas melengkung penuh */
+  background:
+    radial-gradient(circle at 50% 30%, #fff 0%, var(--color-ivory) 55%, #F4E8E4 100%);
+  border: 1px solid var(--color-gold);
+  box-shadow:
+    0 0 0 5px rgba(255, 253, 251, 0.8),
+    0 0 0 6px var(--color-gold-soft),
+    0 14px 34px rgba(59, 49, 56, 0.16),
+    0 0 30px rgba(232, 212, 160, 0.45);
+  overflow: hidden;
+  transform: rotate(-1.2deg);
+}
+
+.frame-right .frame-inner {
+  transform: rotate(1.2deg);
+}
+
+/* placeholder di bawah; foto asli menimpanya kalau file-nya ada */
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-align: center;
+  padding: 0 0.6rem;
+  outline: 1.5px dashed rgba(212, 175, 55, 0.75);
+  outline-offset: -9px;
+  border-radius: inherit;
+
+  svg {
+    width: 46%;
+    opacity: 0.8;
+    margin-bottom: 0.1rem;
+  }
+
+  strong {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: clamp(0.56rem, 1.3vw, 0.72rem);
+    letter-spacing: 0.18em;
+    color: var(--color-rose-dark);
+  }
+
+  small {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: clamp(0.5rem, 1.1vw, 0.6rem);
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+
+  .file {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.92em;
+    color: var(--color-gold);
+    word-break: break-all;
+  }
+}
+
+.frame-inner img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* label kecil "menarik tirai →" di atas bingkai */
+.pull-hint {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  bottom: calc(100% + 0.55rem);
+  white-space: nowrap;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: clamp(0.52rem, 1.1vw, 0.64rem);
+  letter-spacing: 0.14em;
+  color: var(--color-rose-dark);
+  opacity: 0.85;
+}
+
+/* goyangan halus saat idle (tirai masih tertutup) */
+@keyframes sway-l { from { transform: rotate(-1.5deg); } to { transform: rotate(-0.3deg); } }
+@keyframes sway-r { from { transform: rotate(1.5deg); }  to { transform: rotate(0.3deg); }  }
+
+.splash-root:not(.is-opening) .frame-left  .frame-inner { animation: sway-l 5.5s ease-in-out infinite alternate; }
+.splash-root:not(.is-opening) .frame-right .frame-inner { animation: sway-r 5.5s ease-in-out infinite alternate 0.8s; }
+
+/* ============================================================
+   Sapaan + tombol di atas tirai tertutup
+   ============================================================ */
+
+.content {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+
+/* Teks gelap: tirainya kini ivory (terang), teks putih tak terbaca */
+.content .script {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2rem, 6vw, 3rem);
+  color: var(--color-rose-dark);
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.6);
+  margin-bottom: 1rem;
+}
+
+.content .kepada {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 0.55rem;
+}
+
+.content .guest {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(1.7rem, 5vw, 2.4rem);
+  color: var(--color-ink);
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.6);
+}
+
+.content .apology {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.66rem;
+  color: var(--color-muted);
+  margin: 0.5rem 0 2.2rem;
+}
+
+.btn-open {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--color-rose);
+  border: 1px solid var(--color-gold);
+  border-radius: 999px;
+  padding: 0.85rem 2.6rem;
+  cursor: pointer;
+  box-shadow:
+    0 6px 24px rgba(59, 49, 56, 0.18),
+    0 0 0 4px rgba(232, 212, 160, 0.3);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+
+  &:hover {
+    background: var(--color-rose-dark);
+    transform: translateY(-2px);
+    box-shadow:
+      0 10px 28px rgba(59, 49, 56, 0.22),
+      0 0 0 4px rgba(232, 212, 160, 0.5);
+  }
+}
+
+/* Layout "sempit": bingkai foto turun ke bawah panel supaya tidak
+   menabrak teks sapaan; sapaan naik ke sepertiga atas.
+   Berlaku saat viewport-nya sempit (<900px) DAN saat desktop >=1024px —
+   karena di desktop splash dikurung selebar kolom HP. */
+@media (max-width: 899px), (min-width: 1024px) {
+  .photo-frame {
+    top: auto;
+    bottom: 9%;
+    translate: -50% 0;
+    width: clamp(96px, 24vw, 150px);
+  }
+
+  .content {
+    justify-content: flex-start;
+    padding-top: max(12vh, 70px);
+  }
+}
+
+/* ============================================================
+   Koreografi — dipicu class .is-opening (timeline ~2.5s):
+     0.00s     sapaan memudar
+     0.25s     tirai mulai bergeser
+     0.9-1.3s  plateau ±20% terbuka — "momen" foto terlihat menarik tirai
+     1.3-2.5s  tirai menyapu keluar layar, foto ikut terbawa
+     2.55s     .is-leaving (fade sisa overlay), 3.05s unmount
+   ============================================================ */
+
+@keyframes fade-out {
+  to { opacity: 0; visibility: hidden; }
+}
+
+.is-opening .content {
+  animation: fade-out 0.4s ease forwards;
+  pointer-events: none;
+}
+
+.is-opening .pull-hint {
+  animation: fade-out 1.6s ease 0.9s forwards;
+}
+
+@keyframes sweep-left {
+  0%   { transform: translateX(0);     animation-timing-function: cubic-bezier(0.6, 0.05, 0.35, 1); }
+  38%  { transform: translateX(-18%);  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
+  56%  { transform: translateX(-22%);  animation-timing-function: cubic-bezier(0.6, 0.05, 0.25, 1); }
+  100% { transform: translateX(-108%); }
+}
+
+@keyframes sweep-right {
+  0%   { transform: translateX(0);     animation-timing-function: cubic-bezier(0.6, 0.05, 0.35, 1); }
+  38%  { transform: translateX(18%);   animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
+  56%  { transform: translateX(22%);   animation-timing-function: cubic-bezier(0.6, 0.05, 0.25, 1); }
+  100% { transform: translateX(108%); }
+}
+
+.is-opening .panel-left  { animation: sweep-left  2.25s 0.25s forwards; }
+.is-opening .panel-right { animation: sweep-right 2.25s 0.25s forwards; }
+
+/* bingkai ikut "condong" seolah menarik tirai, lalu terbawa keluar */
+@keyframes ride-left {
+  0%   { transform: rotate(-1.2deg); }
+  38%  { transform: rotate(2.6deg); }
+  56%  { transform: rotate(1.8deg); }
+  100% { transform: rotate(-3.5deg); }
+}
+
+@keyframes ride-right {
+  0%   { transform: rotate(1.2deg); }
+  38%  { transform: rotate(-2.6deg); }
+  56%  { transform: rotate(-1.8deg); }
+  100% { transform: rotate(3.5deg); }
+}
+
+.is-opening .frame-left  .frame-inner { animation: ride-left  2.25s 0.25s forwards; }
+.is-opening .frame-right .frame-inner { animation: ride-right 2.25s 0.25s forwards; }
+
+/* ============================================================
+   Accessibility: skip the show, reveal langsung.
+
+   Sengaja HANYA lewat class .reduce (di-set dari TS), tanpa blok
+   @media (prefers-reduced-motion) di CSS — supaya override "?motion"
+   di URL bisa memaksa animasi jalan di mesin dev yang Windows-nya
+   mematikan "Show animations". Preferensi tamu tetap dihormati
+   karena TS membaca matchMedia yang sama.
+   ============================================================ */
+
+.reduce {
+  .panel,
+  .frame-inner,
+  .content,
+  .pull-hint,
+  &.splash-root {
+    transition: none !important;
+    animation: none !important;
+  }
+}

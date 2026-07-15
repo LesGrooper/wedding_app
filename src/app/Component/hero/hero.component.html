@@ -1,0 +1,30 @@
+<section class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-ivory via-rose/10 to-ivory"
+    aria-hidden="true"
+  ></div>
+  <!-- "meadows of dawn and dew" — berkas fajar + kerlip embun -->
+  <app-ambient-dawn />
+  <app-falling-petals [count]="10" />
+  <app-floating-floral position="top-left" [size]="120" />
+  <app-floating-floral position="bottom-right" [size]="140" />
+
+  <div class="relative z-10 max-w-2xl">
+    <p class="font-script text-3xl @md:text-4xl text-rose-dark mb-3">Save the Date</p>
+    <div class="w-24 h-px bg-gold mx-auto mb-6"></div>
+
+    <h1 class="font-serif text-5xl @md:text-7xl text-ink leading-tight mb-2">
+      {{ groom }}
+    </h1>
+    <p class="font-script text-4xl @md:text-5xl text-rose mb-2">&amp;</p>
+    <h1 class="font-serif text-5xl @md:text-7xl text-ink leading-tight mb-8">
+      {{ bride }}
+    </h1>
+
+    <div class="inline-block px-6 py-3 rounded-full border border-gold/60 bg-ivory/60 backdrop-blur-sm">
+      <p class="text-sm @md:text-base text-ink tracking-wider">{{ formattedDate }}</p>
+    </div>
+
+    <p class="mt-10 text-sm text-muted">Untuk: <span class="font-medium text-ink">{{ guestName }}</span></p>
+  </div>
+</section>

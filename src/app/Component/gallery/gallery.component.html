@@ -1,0 +1,57 @@
+<section class="section">
+  <!-- "and there was music" — momen-momen yang bersenandung -->
+  <app-ambient-notes [count]="6" />
+  <div class="text-center">
+    <p class="font-script text-3xl text-rose-dark mb-2" appReveal>Our Moments</p>
+    <div class="w-16 h-px bg-gold mx-auto mb-12" appReveal></div>
+  </div>
+
+  <!-- Reveal seluruh reel sebagai satu unit (bukan per-kartu) -->
+  <div appReveal>
+    <!-- Strip horizontal: swipe / drag, snap ke tengah, kartu berikut ngintip -->
+    <div
+      #reel
+      class="reel flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth px-[14%]"
+      (scroll)="onScroll()"
+    >
+      @for (img of images; track img) {
+        <button
+          type="button"
+          class="snap-center shrink-0 w-[72%] aspect-square overflow-hidden rounded-lg border border-gold/30 shadow-soft cursor-zoom-in"
+          (click)="open(img)"
+        >
+          <img
+            [src]="img"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="w-full h-full object-cover transition hover:scale-105 duration-500"
+            onerror="this.style.opacity='0.2'"
+          />
+        </button>
+      }
+    </div>
+
+    <!-- Titik indikator: menandai posisi, bisa diklik untuk lompat -->
+    <div class="flex justify-center items-center gap-2 mt-5">
+      @for (img of images; track img; let i = $index) {
+        <button
+          type="button"
+          class="h-2 rounded-full transition-all duration-300"
+          [ngClass]="activeIndex() === i ? 'w-5 bg-rose' : 'w-2 bg-gold/40'"
+          (click)="goTo(i)"
+          [attr.aria-label]="'Foto ' + (i + 1)"
+        ></button>
+      }
+    </div>
+  </div>
+
+  @if (active()) {
+    <div
+      class="fixed inset-0 z-[9998] bg-ink/80 flex items-center justify-center p-6 backdrop-blur-sm"
+      (click)="close()"
+    >
+      <img [src]="active()" alt="" class="max-h-full max-w-full rounded-lg shadow-glass" />
+    </div>
+  }
+</section>

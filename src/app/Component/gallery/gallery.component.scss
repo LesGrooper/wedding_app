@@ -1,0 +1,10 @@
+/* Strip tetap bisa di-scroll/swipe, tapi scrollbar-nya disembunyikan
+   agar tampilan reels bersih. */
+.reel {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* Edge lama */
+}
+
+.reel::-webkit-scrollbar {
+  display: none;                /* Chrome / Safari */
+}

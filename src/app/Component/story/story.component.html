@@ -1,0 +1,16 @@
+<section class="section text-center">
+  <!-- "birds in the sky" — sepasang burung menyusuri perjalanan cinta -->
+  <app-ambient-birds mode="fly" />
+  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>Our Love Story</p>
+  <div class="w-16 h-px bg-gold mx-auto mb-12" appReveal></div>
+
+  <ol class="relative border-l border-gold/40 ml-3 @md:ml-0 @md:mx-auto @md:max-w-xl pl-6 @md:pl-10 text-left">
+    @for (item of stories; track $index; let i = $index) {
+      <li class="mb-10 relative" [appReveal]="i % 2 === 0 ? 'left' : 'right'" [revealDelay]="i * 150">
+        <span class="absolute -left-[31px] @md:-left-[44px] top-1 flex items-center justify-center w-4 h-4 rounded-full bg-rose border-2 border-gold"></span>
+        <p class="font-script text-2xl text-rose-dark mb-2">{{ item.label }}</p>
+        <p class="text-sm text-muted leading-relaxed">{{ item.text }}</p>
+      </li>
+    }
+  </ol>
+</section>

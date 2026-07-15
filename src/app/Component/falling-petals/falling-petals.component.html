@@ -1,0 +1,27 @@
+<div
+  class="pointer-events-none absolute inset-0 overflow-hidden"
+  aria-hidden="true"
+>
+  @for (p of petals; track $index) {
+    <span
+      class="petal absolute top-0 block"
+      [style.left.%]="p.left"
+      [style.width.px]="p.size"
+      [style.height.px]="p.size"
+      [style.animation-duration.s]="p.duration"
+      [style.animation-delay.s]="p.delay"
+      [style.--spin]="p.spin + 'deg'"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        class="wafter w-full h-full"
+        fill="#D8A7B1"
+        [style.opacity]="p.opacity"
+        [style.animation-duration.s]="p.swayDur"
+        [style.--sway]="p.sway + 'px'"
+      >
+        <path d="M12 2C8 6 6 10 6 14c0 3.3 2.7 6 6 6s6-2.7 6-6c0-4-2-8-6-12z"/>
+      </svg>
+    </span>
+  }
+</div>

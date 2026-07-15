@@ -1,0 +1,26 @@
+<div class="layer" aria-hidden="true">
+  @for (n of notes; track $index) {
+    <svg
+      class="note"
+      viewBox="0 0 26 32"
+      [style.left.%]="n.left"
+      [style.width.px]="n.size"
+      [style.animation-delay.s]="n.delay"
+      [style.animation-duration.s]="n.duration"
+      [style.color]="n.color"
+    >
+      @if (n.double) {
+        <!-- not ganda ♫ -->
+        <path d="M8 6 L22 3 L22 20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+        <path d="M8 6 L8 23" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+        <ellipse cx="6" cy="24" rx="4" ry="3" fill="currentColor" />
+        <ellipse cx="20" cy="21" rx="4" ry="3" fill="currentColor" />
+      } @else {
+        <!-- not tunggal ♪ -->
+        <path d="M10 5 L10 22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+        <path d="M10 5 C15 6 17 9 17 13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+        <ellipse cx="8" cy="23" rx="4.5" ry="3.2" fill="currentColor" />
+      }
+    </svg>
+  }
+</div>

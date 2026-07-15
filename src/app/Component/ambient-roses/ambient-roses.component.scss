@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Wrapper luar = mekar one-shot (forwards); svg dalam = sway loop.
+   Dipisah supaya dua animasi transform tidak saling menimpa. */
+.bloom {
+  position: absolute;
+  width: clamp(70px, 24%, 110px);
+  opacity: 0;
+  transform: scale(0.55) rotate(-10deg);
+  animation: bloom 1.9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-play-state: paused;
+}
+
+.bloom-left  { left: -3%;  top: 14%; }
+.bloom-right { right: -3%; bottom: 6%; animation-delay: 0.5s; }
+
+@keyframes bloom {
+  from { opacity: 0;    transform: scale(0.55) rotate(-10deg); }
+  to   { opacity: 0.32; transform: scale(1) rotate(0deg); }
+}
+
+.rose {
+  display: block;
+  animation: rose-sway 7.8s ease-in-out infinite alternate;
+  animation-play-state: paused;
+  transform-origin: 50% 80%;
+}
+
+.bloom-right .rose { animation-delay: 3.9s; }
+
+@keyframes rose-sway {
+  from { transform: rotate(-2deg); }
+  to   { transform: rotate(2deg); }
+}
+
+:host(.is-live) .bloom,
+:host(.is-live) .rose {
+  animation-play-state: running;
+}

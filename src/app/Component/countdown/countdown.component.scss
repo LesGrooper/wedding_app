@@ -1,0 +1,15 @@
+/* Napas halus seirama lagu: 3.9s = 4 ketukan @ ~62 BPM.
+   Hanya berjalan saat terlihat (appAmbientLive -> .is-live). */
+.breathe {
+  animation: breathe 3.9s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.breathe.is-live {
+  animation-play-state: running;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.008); }
+}

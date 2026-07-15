@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1500" preserveAspectRatio="xMidYMid slice" fill="none">
+  <defs>
+    <radialGradient id="bg-glow" cx="50%" cy="42%" r="62%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#FFFDFB"/>
+      <stop offset="100%" stop-color="#F7EDE9"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1000" height="1500" fill="url(#bg-glow)"/>
+
+  <!-- Top-left golden sprig -->
+  <g stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round" opacity="0.85">
+    <path d="M0,120 C90,150 150,110 210,150 C260,184 300,150 360,180" fill="none"/>
+    <path d="M0,60 C70,84 120,60 170,92" fill="none" stroke-width="1.8"/>
+    <g fill="#E8D4A0" stroke="none">
+      <ellipse cx="118" cy="120" rx="15" ry="8" transform="rotate(-28 118 120)"/>
+      <ellipse cx="186" cy="146" rx="14" ry="7" transform="rotate(-18 186 146)"/>
+      <ellipse cx="258" cy="160" rx="13" ry="7" transform="rotate(-12 258 160)"/>
+      <ellipse cx="86" cy="78" rx="12" ry="6" transform="rotate(-30 86 78)"/>
+    </g>
+    <g fill="#D8A7B1" stroke="none" opacity="0.9">
+      <circle cx="150" cy="132" r="6"/>
+      <circle cx="224" cy="156" r="6"/>
+      <circle cx="320" cy="172" r="5"/>
+    </g>
+  </g>
+
+  <!-- Top-right golden sprig (mirror) -->
+  <g stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round" opacity="0.85" transform="translate(1000,0) scale(-1,1)">
+    <path d="M0,120 C90,150 150,110 210,150 C260,184 300,150 360,180" fill="none"/>
+    <path d="M0,60 C70,84 120,60 170,92" fill="none" stroke-width="1.8"/>
+    <g fill="#E8D4A0" stroke="none">
+      <ellipse cx="118" cy="120" rx="15" ry="8" transform="rotate(-28 118 120)"/>
+      <ellipse cx="186" cy="146" rx="14" ry="7" transform="rotate(-18 186 146)"/>
+      <ellipse cx="258" cy="160" rx="13" ry="7" transform="rotate(-12 258 160)"/>
+      <ellipse cx="86" cy="78" rx="12" ry="6" transform="rotate(-30 86 78)"/>
+    </g>
+    <g fill="#D8A7B1" stroke="none" opacity="0.9">
+      <circle cx="150" cy="132" r="6"/>
+      <circle cx="224" cy="156" r="6"/>
+      <circle cx="320" cy="172" r="5"/>
+    </g>
+  </g>
+</svg>

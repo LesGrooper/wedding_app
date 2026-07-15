@@ -1,0 +1,135 @@
+:host {
+  display: contents;
+}
+
+/* ============================================================
+   Layout desktop (>=1024px): undangan dikurung di kolom kiri
+   selebar HP (--invite-col-w di styles.css), sisa layar diisi
+   panel foto prewedding yang diam (fixed).
+   Di bawah 1024px semuanya kembali full-width seperti biasa.
+   ============================================================ */
+
+.photo-panel {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  /* konten halaman menempel kiri, selebar kolom */
+  .invite-col {
+    max-width: var(--invite-col-w);
+  }
+
+  /* kelopak bunga ambient hanya jatuh di dalam kolom */
+  .petals-layer {
+    right: auto;
+    width: var(--invite-col-w);
+  }
+
+  /* tombol musik menempel di pojok kolom, bukan pojok layar */
+  .bgm-btn {
+    right: auto;
+    left: calc(var(--invite-col-w) - 4.25rem); /* 3rem tombol + 1.25rem margin */
+  }
+
+  .photo-panel {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: var(--invite-col-w);
+    right: 0;
+    z-index: 5;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 38%, #fff 0%, var(--color-ivory) 55%, #F4E8E4 100%);
+    border-left: 1px solid var(--color-gold);
+
+    /* bayangan halus dari kolom undangan jatuh ke panel */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 28px;
+      z-index: 2;
+      background: linear-gradient(90deg, rgba(59, 49, 56, 0.10), transparent);
+      pointer-events: none;
+    }
+  }
+
+  .photo-panel img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .panel-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    text-align: center;
+    padding: 0 2rem;
+
+    /* bingkai garis emas tipis ala undangan */
+    outline: 1px solid var(--color-gold);
+    outline-offset: -28px;
+
+    svg {
+      width: clamp(120px, 14vw, 190px);
+      margin-bottom: 0.4rem;
+    }
+
+    strong {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.22em;
+      color: var(--color-rose-dark);
+    }
+
+    small {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 0.68rem;
+      line-height: 1.8;
+      color: var(--color-muted);
+    }
+
+    .file {
+      color: var(--color-gold);
+    }
+  }
+
+  .panel-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    /* Vignette gelap lembut di sudut kanan-bawah: menegaskan caption
+       champagne tanpa memburamkan foto atau memberi pita terang selebar
+       bawah (foto prewed umumnya gelap di area ini). */
+    background: radial-gradient(120% 95% at 100% 100%,
+      rgba(28, 20, 24, 0.62) 0%,
+      rgba(28, 20, 24, 0.28) 26%,
+      transparent 52%);
+    pointer-events: none;
+  }
+
+  .panel-caption {
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+    left: auto;
+    max-width: 62%;
+    z-index: 2;
+    text-align: right;
+    line-height: 1.1;
+    font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+    color: var(--color-gold-soft);
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.75);
+    pointer-events: none;
+  }
+}

@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ivory: #FFFDFB;
+  --color-rose: #D8A7B1;
+  --color-rose-dark: #B8848F;
+  --color-gold: #D4AF37;
+  --color-gold-soft: #E8D4A0;
+  --color-ink: #3B3138;
+  --color-muted: #8B7B82;
+
+  /* Lebar kolom undangan di desktop (>=1024px): app dikurung selebar
+     HP di kiri, sisa layar jadi panel foto prewedding. */
+  --invite-col-w: 430px;
+}
+
+html, body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+@layer components {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 700ms ease-out, transform 700ms ease-out;
+  }
+  .reveal.reveal-left { transform: translateX(-32px); }
+  .reveal.reveal-right { transform: translateX(32px); }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  .glass {
+    background: rgba(255, 253, 251, 0.35);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 8px 32px rgba(184, 132, 143, 0.15);
+    border-radius: 24px;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full bg-rose text-white font-medium tracking-wide transition hover:bg-rose-dark border border-gold/40 shadow-soft;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full border border-rose text-rose-dark font-medium tracking-wide transition hover:bg-rose hover:text-white;
+  }
+
+  .section {
+    @apply relative w-full max-w-3xl mx-auto px-6 py-20;
+  }
+
+  .heading-serif {
+    @apply font-serif text-rose-dark;
+  }
+
+  .heading-script {
+    @apply font-script text-rose-dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .animate-fade-in {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}

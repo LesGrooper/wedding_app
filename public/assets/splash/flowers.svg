@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" preserveAspectRatio="xMidYMax meet" fill="none">
+  <defs>
+    <radialGradient id="fl-rose" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#F3D7DC"/>
+      <stop offset="100%" stop-color="#D8A7B1"/>
+    </radialGradient>
+    <radialGradient id="fl-cream" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#FFFDF7"/>
+      <stop offset="100%" stop-color="#E8D4A0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Foliage -->
+  <g fill="#A9BE9B" opacity="0.9">
+    <ellipse cx="120" cy="150" rx="46" ry="18" transform="rotate(-28 120 150)"/>
+    <ellipse cx="480" cy="150" rx="46" ry="18" transform="rotate(28 480 150)"/>
+    <ellipse cx="220" cy="120" rx="40" ry="15" transform="rotate(-16 220 120)"/>
+    <ellipse cx="380" cy="120" rx="40" ry="15" transform="rotate(16 380 120)"/>
+    <ellipse cx="300" cy="110" rx="34" ry="13"/>
+  </g>
+  <g fill="#8FA67E" opacity="0.7">
+    <ellipse cx="170" cy="170" rx="34" ry="13" transform="rotate(-20 170 170)"/>
+    <ellipse cx="430" cy="170" rx="34" ry="13" transform="rotate(20 430 170)"/>
+  </g>
+
+  <!-- Roses: layered petals (simple, stylized) -->
+  <g>
+    <!-- helper rose appearance via overlapping circles -->
+    <g>
+      <circle cx="150" cy="165" r="34" fill="url(#fl-rose)"/>
+      <circle cx="150" cy="165" r="20" fill="#C98F9B" opacity="0.55"/>
+      <circle cx="150" cy="165" r="9" fill="#B8848F"/>
+    </g>
+    <g>
+      <circle cx="450" cy="165" r="34" fill="url(#fl-rose)"/>
+      <circle cx="450" cy="165" r="20" fill="#C98F9B" opacity="0.55"/>
+      <circle cx="450" cy="165" r="9" fill="#B8848F"/>
+    </g>
+    <g>
+      <circle cx="240" cy="150" r="30" fill="url(#fl-cream)"/>
+      <circle cx="240" cy="150" r="17" fill="#EAD6AE" opacity="0.6"/>
+      <circle cx="240" cy="150" r="7" fill="#D4AF37" opacity="0.7"/>
+    </g>
+    <g>
+      <circle cx="360" cy="150" r="30" fill="url(#fl-cream)"/>
+      <circle cx="360" cy="150" r="17" fill="#EAD6AE" opacity="0.6"/>
+      <circle cx="360" cy="150" r="7" fill="#D4AF37" opacity="0.7"/>
+    </g>
+    <g>
+      <circle cx="300" cy="135" r="36" fill="url(#fl-rose)"/>
+      <circle cx="300" cy="135" r="22" fill="#C98F9B" opacity="0.5"/>
+      <circle cx="300" cy="135" r="10" fill="#B8848F"/>
+    </g>
+  </g>
+
+  <!-- Tiny buds -->
+  <g fill="#E6BCC4">
+    <circle cx="100" cy="135" r="9"/>
+    <circle cx="500" cy="135" r="9"/>
+    <circle cx="200" cy="115" r="7"/>
+    <circle cx="400" cy="115" r="7"/>
+  </g>
+</svg>
