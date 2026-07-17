@@ -48,5 +48,5 @@ resources/android/**/*
 /.nx
 /.env
 /.editorconfig
+# Backend Apps Script — sumber kebenarannya ada di editor script.google.com
 apps-script
-scripts
