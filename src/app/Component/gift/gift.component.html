@@ -1,0 +1,19 @@
+<section class="section text-center">
+  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>{{ trans('gift_title') }}</p>
+  <div class="w-16 h-px bg-gold mx-auto mb-6" appReveal></div>
+
+  <p class="text-sm text-muted max-w-md mx-auto mb-10 leading-relaxed" appReveal>
+    {{ trans('gift_intro') }}
+  </p>
+
+  <div class="space-y-5">
+    @for (acc of accounts; track acc.number) {
+      <div class="glass px-6 py-6 @md:px-8 @md:py-7" appReveal>
+        <p class="text-[11px] uppercase tracking-[0.25em] text-muted">{{ acc.bank }}</p>
+        <p class="font-serif text-2xl @md:text-3xl text-ink tracking-wider my-2">{{ acc.number }}</p>
+        <p class="text-sm text-muted mb-5">{{ trans('gift_on_behalf') }} {{ acc.name }}</p>
+        <button type="button" class="btn-outline" (click)="copy(acc.number)">{{ trans('gift_copy') }}</button>
+      </div>
+    }
+  </div>
+</section>
