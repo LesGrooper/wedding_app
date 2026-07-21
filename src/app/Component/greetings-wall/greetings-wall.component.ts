@@ -8,6 +8,7 @@ import { ToastService } from '../../Services/toast.service';
 import { Greeting } from '../../Models/greeting.model';
 import { RevealOnScrollDirective } from '../../Directives/reveal-on-scroll.directive';
 import { AmbientNotesComponent } from '../ambient-notes/ambient-notes.component';
+import { TransliterationService } from '../../Services/transliteration.service';
 
 @Component({
   selector: 'app-greetings-wall',
@@ -36,6 +37,7 @@ export class GreetingsWallComponent implements OnInit {
     private apiService:ApiService,
     private guestService:GuestService,
     private toastService:ToastService,
+    public ts:TransliterationService,
   ) {
     this.form = this.formBuilder.nonNullable.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -84,35 +86,40 @@ export class GreetingsWallComponent implements OnInit {
         ...list,
       ]);
       this.form.controls.message.setValue('');
-      this.toastService.toastSuccess('Ucapan terkirim. Terima kasih!');
+      this.toastService.toastSuccess(this.ts.trans('greetings_toast_ok'));
     } else if (res.error === 'rate_limited') {
-      this.toastService.toastWarning('Terlalu banyak kiriman, coba beberapa saat lagi.');
+      this.toastService.toastWarning(this.ts.trans('greetings_toast_rate'));
     } else {
       this.toastService.toastDanger(this.errorMessage(res.error));
     }
   }
 
+  trans(key:string, ...p:string[]):string {
+    return this.ts.trans(key, ...p);
+  }
+
   /**
-   * Compact relative-time formatter (e.g. "5m lalu", "2j lalu", "3h lalu").
+   * Compact relative-time formatter (mengikuti bahasa aktif),
+   * mis. "5m lalu" / "5m ago".
    */
-  formatRelative(ts:string):string {
-    if (!ts) return '';
-    const date = new Date(ts);
+  formatRelative(iso:string):string {
+    if (!iso) return '';
+    const date = new Date(iso);
     if (isNaN(date.getTime())) return '';
     const diff = Date.now() - date.getTime();
     const min = Math.floor(diff / 60000);
-    if (min < 1) return 'baru saja';
-    if (min < 60) return `${min}m lalu`;
+    if (min < 1) return this.ts.trans('greetings_just_now');
+    if (min < 60) return this.ts.trans('greetings_min_ago', String(min));
     const h = Math.floor(min / 60);
-    if (h < 24) return `${h}j lalu`;
+    if (h < 24) return this.ts.trans('greetings_hour_ago', String(h));
     const d = Math.floor(h / 24);
-    return `${d}h lalu`;
+    return this.ts.trans('greetings_day_ago', String(d));
   }
 
   private errorMessage(code?:string):string {
-    if (code === 'network') return 'Koneksi terputus, silakan coba lagi.';
-    if (code === 'timeout') return 'Server lambat merespons, coba lagi.';
-    return 'Gagal mengirim ucapan.';
+    if (code === 'network') return this.ts.trans('greetings_err_network');
+    if (code === 'timeout') return this.ts.trans('greetings_err_timeout');
+    return this.ts.trans('greetings_err_generic');
   }
 
 }

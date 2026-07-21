@@ -2,25 +2,25 @@
   <!-- "there was music" — ucapan & doa tamu adalah musiknya -->
   <app-ambient-notes [count]="4" />
   <div class="text-center">
-    <p class="font-script text-3xl text-rose-dark mb-2" appReveal>Ucapan & Doa</p>
+    <p class="font-script text-3xl text-rose-dark mb-2" appReveal>{{ trans('greetings_title') }}</p>
     <div class="w-16 h-px bg-gold mx-auto mb-10" appReveal></div>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="submit()" class="glass p-6 @md:p-8 space-y-4 mb-8" appReveal>
-    <input type="text" formControlName="name" placeholder="Nama Anda"
+    <input type="text" formControlName="name" [placeholder]="trans('greetings_ph_name')"
       class="w-full bg-ivory/60 border border-gold/40 rounded-full px-5 py-3 text-ink focus:outline-none focus:border-rose" />
-    <textarea formControlName="message" rows="3" placeholder="Tulis ucapan & doa..."
+    <textarea formControlName="message" rows="3" [placeholder]="trans('greetings_ph_message')"
       class="w-full bg-ivory/60 border border-gold/40 rounded-2xl px-5 py-3 text-ink focus:outline-none focus:border-rose"></textarea>
     <button type="submit" [disabled]="form.invalid || submitting()" class="btn-primary w-full disabled:opacity-60">
-      {{ submitting() ? 'Mengirim...' : 'Kirim Ucapan' }}
+      {{ submitting() ? trans('greetings_submitting') : trans('greetings_submit') }}
     </button>
   </form>
 
   <div class="space-y-4 max-h-[28rem] overflow-y-auto pr-1">
     @if (loading()) {
-      <p class="text-center text-sm text-muted py-8">Memuat ucapan...</p>
+      <p class="text-center text-sm text-muted py-8">{{ trans('greetings_loading') }}</p>
     } @else if (greetings().length === 0) {
-      <p class="text-center text-sm text-muted py-8">Belum ada ucapan. Jadi yang pertama!</p>
+      <p class="text-center text-sm text-muted py-8">{{ trans('greetings_empty') }}</p>
     } @else {
       @for (g of greetings(); track g.timestamp + g.name; let i = $index) {
         <div class="bg-ivory border border-gold/30 rounded-2xl px-5 py-4 shadow-soft" appReveal [revealDelay]="i * 50">

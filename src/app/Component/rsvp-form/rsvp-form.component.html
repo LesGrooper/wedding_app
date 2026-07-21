@@ -1,13 +1,13 @@
 <section class="section">
   <div class="text-center">
-    <p class="font-script text-3xl text-rose-dark mb-2" appReveal>Konfirmasi Kehadiran</p>
+    <p class="font-script text-3xl text-rose-dark mb-2" appReveal>{{ trans('rsvp_title') }}</p>
     <div class="w-16 h-px bg-gold mx-auto mb-10" appReveal></div>
   </div>
 
   @if (alreadySubmitted()) {
     <div class="glass p-8 text-center" appReveal>
-      <p class="font-serif text-xl text-ink mb-2">Terima kasih!</p>
-      <p class="text-sm text-muted">Konfirmasi kehadiran Anda sudah kami terima.</p>
+      <p class="font-serif text-xl text-ink mb-2">{{ trans('rsvp_thanks_title') }}</p>
+      <p class="text-sm text-muted">{{ trans('rsvp_thanks_body') }}</p>
     </div>
   } @else {
     <div class="relative">
@@ -15,26 +15,26 @@
       <app-ambient-vine />
       <form [formGroup]="form" (ngSubmit)="submit()" class="glass p-6 @md:p-8 space-y-5" appReveal>
       <div>
-        <label class="block text-xs uppercase tracking-[0.2em] text-muted mb-2">Nama</label>
+        <label class="block text-xs uppercase tracking-[0.2em] text-muted mb-2">{{ trans('rsvp_label_name') }}</label>
         <input type="text" formControlName="name"
           class="w-full bg-ivory/60 border border-gold/40 rounded-full px-5 py-3 text-ink focus:outline-none focus:border-rose" />
       </div>
 
       <div>
-        <label class="block text-xs uppercase tracking-[0.2em] text-muted mb-2">Kehadiran</label>
+        <label class="block text-xs uppercase tracking-[0.2em] text-muted mb-2">{{ trans('rsvp_label_attendance') }}</label>
         @for (opt of statusOptions; track opt.value) {
           <label class="cursor-pointer">
             <input type="radio" formControlName="status" [value]="opt.value" class="peer sr-only" />
             <span class="block text-center py-3 w-full rounded-full border border-gold/40 bg-ivory/60 text-sm
               peer-checked:bg-rose peer-checked:text-white peer-checked:border-rose-dark transition">
-              {{ opt.label }}
+              {{ trans(opt.labelKey) }}
             </span>
           </label>
         }
       </div>
 
       <div>
-        <label class="block text-xs uppercase tracking-[0.2em] text-muted mb-2">Jumlah Tamu</label>
+        <label class="block text-xs uppercase tracking-[0.2em] text-muted mb-2">{{ trans('rsvp_label_guests') }}</label>
         <input type="number" max="1" formControlName="partner_count"
           class="w-full bg-ivory/60 border border-gold/40 rounded-full px-5 py-3 text-ink focus:outline-none focus:border-rose" />
       </div>
@@ -46,7 +46,7 @@
       </div> -->
 
       <button type="submit" [disabled]="form.invalid || submitting()" class="btn-primary w-full disabled:opacity-60">
-        {{ submitting() ? 'Mengirim...' : 'Kirim Konfirmasi' }}
+        {{ submitting() ? trans('rsvp_submitting') : trans('rsvp_submit') }}
       </button>
     </form>
     </div>

@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RevealOnScrollDirective } from '../../Directives/reveal-on-scroll.directive';
 import { AmbientNotesComponent } from '../ambient-notes/ambient-notes.component';
+import { TransliterationService } from '../../Services/transliteration.service';
 
 @Component({
   selector: 'app-gallery',
@@ -39,7 +40,11 @@ export class GalleryComponent {
   /** Ensures at most one scroll handler runs per animation frame. */
   private rafScheduled:boolean = false;
 
-  constructor() { }
+  constructor(public ts:TransliterationService) { }
+
+  trans(key:string, ...p:string[]):string {
+    return this.ts.trans(key, ...p);
+  }
 
   open(src:string):void {
     this.active.set(src);

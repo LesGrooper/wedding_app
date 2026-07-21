@@ -9,6 +9,7 @@ import { GetStorage, SetStorage, RSVP_FLAG } from '../../Services/storage.servic
 import { RevealOnScrollDirective } from '../../Directives/reveal-on-scroll.directive';
 import { AmbientVineComponent } from '../ambient-vine/ambient-vine.component';
 import { RsvpPayload, RsvpStatus } from '../../Models/rsvp.model';
+import { TransliterationService } from '../../Services/transliteration.service';
 
 @Component({
   selector: 'app-rsvp-form',
@@ -22,10 +23,10 @@ export class RsvpFormComponent implements OnInit {
   /**
    * Radio options for attendance status, rendered as pill buttons.
    */
-  statusOptions:{ value:RsvpStatus; label:string }[] = [
-    { value: 'hadir', label: 'Hadir' },
-    // { value: 'tidak', label: 'Tidak Hadir' },
-    // { value: 'mungkin', label: 'Mungkin' },
+  statusOptions:{ value:RsvpStatus; labelKey:string }[] = [
+    { value: 'hadir', labelKey: 'rsvp_opt_attend' },
+    // { value: 'tidak', labelKey: 'rsvp_opt_absent' },
+    // { value: 'mungkin', labelKey: 'rsvp_opt_maybe' },
   ];
 
   /**
@@ -51,6 +52,7 @@ export class RsvpFormComponent implements OnInit {
     private apiService:ApiService,
     private guestService:GuestService,
     private toastService:ToastService,
+    public ts:TransliterationService,
   ) {
     this.form = this.formBuilder.nonNullable.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -93,20 +95,24 @@ export class RsvpFormComponent implements OnInit {
     if (res.ok) {
       await SetStorage(RSVP_FLAG(slug), true);
       this.alreadySubmitted.set(true);
-      this.toastService.toastSuccess('Konfirmasi terkirim. Terima kasih!');
+      this.toastService.toastSuccess(this.ts.trans('rsvp_toast_ok'));
     } else {
       this.toastService.toastDanger(this.errorMessage(res.error));
     }
   }
 
+  trans(key:string, ...p:string[]):string {
+    return this.ts.trans(key, ...p);
+  }
+
   /**
-   * Map known API error codes to Indonesian user-facing strings.
+   * Map known API error codes to user-facing strings (mengikuti bahasa aktif).
    * Unknown codes fall back to a generic message.
    */
   private errorMessage(code?:string):string {
-    if (code === 'network') return 'Koneksi terputus, silakan coba lagi.';
-    if (code === 'timeout') return 'Server lambat merespons, coba lagi.';
-    return 'Gagal mengirim konfirmasi. Coba lagi nanti.';
+    if (code === 'network') return this.ts.trans('rsvp_err_network');
+    if (code === 'timeout') return this.ts.trans('rsvp_err_timeout');
+    return this.ts.trans('rsvp_err_generic');
   }
 
 }

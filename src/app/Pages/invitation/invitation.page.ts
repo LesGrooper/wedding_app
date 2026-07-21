@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { environment } from '../../../environments/environment';
 import { GuestService } from '../../Services/guest.service';
+import { TransliterationService } from '../../Services/transliteration.service';
 
 import { SplashComponent } from '../../Component/splash/splash.component';
 import { FallingPetalsComponent } from '../../Component/falling-petals/falling-petals.component';
@@ -13,6 +14,7 @@ import { StoryComponent } from '../../Component/story/story.component';
 import { GalleryComponent } from '../../Component/gallery/gallery.component';
 import { LocationComponent } from '../../Component/location/location.component';
 import { RsvpFormComponent } from '../../Component/rsvp-form/rsvp-form.component';
+import { GiftComponent } from '../../Component/gift/gift.component';
 import { GreetingsWallComponent } from '../../Component/greetings-wall/greetings-wall.component';
 import { ParallaxBgComponent } from '../../Component/parallax-bg/parallax-bg.component';
 import { AmbientBirdsComponent } from '../../Component/ambient-birds/ambient-birds.component';
@@ -32,6 +34,7 @@ import { FormatDatePipe } from '../../Pipes/format-date.pipe';
     GalleryComponent,
     LocationComponent,
     RsvpFormComponent,
+    GiftComponent,
     GreetingsWallComponent,
     ParallaxBgComponent,
     AmbientBirdsComponent,
@@ -70,10 +73,15 @@ export class InvitationPage {
 
   constructor(
     public guestService:GuestService,
+    public ts:TransliterationService,
   ) {
     // Lock background scrolling while the splash is on top of the page.
     // Restored in onOpen() when the user dismisses the splash.
     document.body.classList.add('no-scroll');
+  }
+
+  trans(key:string, ...p:string[]):string {
+    return this.ts.trans(key, ...p);
   }
 
   /**

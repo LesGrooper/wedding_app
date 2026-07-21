@@ -10,7 +10,7 @@
   <app-floating-floral position="bottom-right" [size]="140" />
 
   <div class="relative z-10 max-w-2xl">
-    <p class="font-script text-3xl @md:text-4xl text-rose-dark mb-3">Save the Date</p>
+    <p class="font-script text-3xl @md:text-4xl text-rose-dark mb-3">{{ trans('hero_save_the_date') }}</p>
     <div class="w-24 h-px bg-gold mx-auto mb-6"></div>
 
     <h1 class="font-serif text-5xl @md:text-7xl text-ink leading-tight mb-2">
@@ -25,6 +25,6 @@
       <p class="text-sm @md:text-base text-ink tracking-wider">{{ formattedDate }}</p>
     </div>
 
-    <p class="mt-10 text-sm text-muted">Untuk: <span class="font-medium text-ink">{{ guestName }}</span></p>
+    <p class="mt-10 text-sm text-muted">{{ trans('hero_for_guest') }}: <span class="font-medium text-ink">{{ guestName }}</span></p>
   </div>
 </section>

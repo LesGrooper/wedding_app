@@ -1,7 +1,7 @@
 <section class="section text-center">
   <!-- "till there was you" — sepasang mawar mekar saat section terlihat -->
   <app-ambient-roses />
-  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>Mempelai</p>
+  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>{{ trans('couple_title') }}</p>
   <div class="w-16 h-px bg-gold mx-auto mb-12" appReveal></div>
 
   <div class="grid grid-cols-1 @md:grid-cols-2 gap-12">
@@ -10,7 +10,7 @@
         <img [src]="groom.photo" alt="" class="w-full h-full object-cover" loading="lazy" />
       </div>
       <h3 class="font-serif text-2xl @md:text-3xl text-ink mb-1">{{ groom.name }}</h3>
-      <p class="text-sm text-muted leading-relaxed whitespace-pre-line">{{ groom.parents }}</p>
+      <p class="text-sm text-muted leading-relaxed whitespace-pre-line">{{ trans('couple_groom_parents', groom.father, groom.mother) }}</p>
     </div>
 
     <div appReveal="right" [revealDelay]="200">
@@ -18,7 +18,7 @@
         <img [src]="bride.photo" alt="" class="w-full h-full object-cover" loading="lazy" />
       </div>
       <h3 class="font-serif text-2xl @md:text-3xl text-ink mb-1">{{ bride.name }}</h3>
-      <p class="text-sm text-muted leading-relaxed whitespace-pre-line">{{ bride.parents }}</p>
+      <p class="text-sm text-muted leading-relaxed whitespace-pre-line">{{ trans('couple_bride_parents', bride.father, bride.mother) }}</p>
     </div>
   </div>
 </section>

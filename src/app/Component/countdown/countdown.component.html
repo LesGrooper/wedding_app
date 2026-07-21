@@ -1,9 +1,22 @@
 <section class="section text-center">
-  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>Counting the Days</p>
+  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>{{ trans('countdown_title') }}</p>
   <div class="w-16 h-px bg-gold mx-auto mb-3" appReveal></div>
-  <p class="text-sm text-muted mb-10" appReveal>
+  <p class="text-sm text-muted mb-5" appReveal>
     {{ eventDate | formatDate: 'EEEE, d MMMM yyyy' }}
   </p>
+
+  <!-- Jadwal: teks bebas dari .env (ujung bisa "Selesai"), dirender apa adanya -->
+  <div class="mb-10 flex items-center justify-center gap-5 @md:gap-8" appReveal>
+    <div class="text-right">
+      <p class="text-[10px] @md:text-xs uppercase tracking-[0.25em] text-muted">{{ trans('countdown_akad') }}</p>
+      <p class="mt-1 text-sm text-ink">{{ akadTime }}</p>
+    </div>
+    <div class="self-stretch w-px bg-gold/60"></div>
+    <div class="text-left">
+      <p class="text-[10px] @md:text-xs uppercase tracking-[0.25em] text-muted">{{ trans('countdown_reception') }}</p>
+      <p class="mt-1 text-sm text-ink">{{ receptionTime }}</p>
+    </div>
+  </div>
 
   <div class="glass px-6 py-8 @md:px-10 @md:py-10 inline-block" appReveal>
     <!-- "bernapas" seirama tempo lagu (~62 BPM); animasi transform di

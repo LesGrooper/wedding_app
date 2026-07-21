@@ -1,7 +1,7 @@
 <section class="section text-center">
   <!-- "bells on the hill" — lonceng pernikahan di bukit tempat acara -->
   <app-ambient-hill-bells />
-  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>Lokasi Acara</p>
+  <p class="font-script text-3xl text-rose-dark mb-2" appReveal>{{ trans('location_title') }}</p>
   <div class="w-16 h-px bg-gold mx-auto mb-6" appReveal></div>
 
   <h3 class="font-serif text-2xl text-ink mb-1" appReveal>{{ name }}</h3>
@@ -20,6 +20,6 @@
   </div>
 
   <a [href]="openUrl" target="_blank" rel="noopener noreferrer" class="btn-outline" appReveal>
-    Buka di Google Maps
+    {{ trans('location_open_maps') }}
   </a>
 </section>

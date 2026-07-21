@@ -1,15 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { RevealOnScrollDirective } from '../../Directives/reveal-on-scroll.directive';
 import { AmbientBirdsComponent } from '../ambient-birds/ambient-birds.component';
-
-/**
- * One chapter on the love-story timeline: a short time label
- * (script) followed by the narrative paragraph.
- */
-interface StoryItem {
-  label: string;
-  text: string;
-}
+import { TransliterationService } from '../../Services/transliteration.service';
 
 @Component({
   selector: 'app-story',
@@ -21,11 +13,13 @@ interface StoryItem {
 export class StoryComponent {
 
   /**
-   * Timeline chapters, ordered chronologically. Content lives in
-   * environment.ts (`env.story`) and is bound from invitation.page.html.
+   * Bab cerita cinta kini dwibahasa di transliteration.service.ts;
+   * template membacanya lewat ts.stories() sesuai bahasa aktif.
    */
-  @Input("stories") stories:StoryItem[] = [];
+  constructor(public ts:TransliterationService) { }
 
-  constructor() { }
+  trans(key:string, ...p:string[]):string {
+    return this.ts.trans(key, ...p);
+  }
 
 }

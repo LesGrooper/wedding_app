@@ -428,6 +428,37 @@
   }
 }
 
+/* Toggle bahasa ID/EN di bawah tombol Buka Undangan. */
+.lang-toggle {
+  margin-top: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+
+  span { color: rgba(139, 123, 130, 0.6); }
+
+  button {
+    text-transform: uppercase;
+    color: var(--color-rose-dark);
+    background: transparent;
+    border: 1px solid var(--color-gold);
+    border-radius: 999px;
+    padding: 0.28rem 0.85rem;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+
+    &.active {
+      color: #fff;
+      background: var(--color-rose);
+      border-color: var(--color-rose-dark);
+    }
+  }
+}
+
 /* ============================================================
    Koreografi — dipicu class .is-opening; delay ABSOLUT semua
    ============================================================ */

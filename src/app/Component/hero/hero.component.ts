@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FallingPetalsComponent } from '../falling-petals/falling-petals.component';
 import { FloatingFloralComponent } from '../floating-floral/floating-floral.component';
 import { AmbientDawnComponent } from '../ambient-dawn/ambient-dawn.component';
+import { TransliterationService } from '../../Services/transliteration.service';
 
 @Component({
   selector: 'app-hero',
@@ -17,6 +18,10 @@ export class HeroComponent {
   @Input("formattedDate") formattedDate:string = '';
   @Input("guestName") guestName:string = 'Tamu Undangan';
 
-  constructor() { }
+  constructor(public ts:TransliterationService) { }
+
+  trans(key:string, ...p:string[]):string {
+    return this.ts.trans(key, ...p);
+  }
 
 }

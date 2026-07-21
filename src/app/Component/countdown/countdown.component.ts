@@ -6,6 +6,7 @@ import { CountdownService, CountdownTick } from '../../Services/countdown.servic
 import { FormatDatePipe } from '../../Pipes/format-date.pipe';
 import { RevealOnScrollDirective } from '../../Directives/reveal-on-scroll.directive';
 import { AmbientLiveDirective } from '../../Directives/ambient-live.directive';
+import { TransliterationService } from '../../Services/transliteration.service';
 
 @Component({
   selector: 'app-countdown',
@@ -18,6 +19,10 @@ export class CountdownComponent implements OnInit {
 
   @Input("eventDate") eventDate!:string;
 
+  /** Jadwal acara — teks bebas dari .env, ditampilkan apa adanya. */
+  @Input("akadTime") akadTime!:string;
+  @Input("receptionTime") receptionTime!:string;
+
   /**
    * Live stream emitted every second with days/hours/minutes/seconds.
    * Assigned in ngOnInit because we depend on the @Input value.
@@ -26,23 +31,28 @@ export class CountdownComponent implements OnInit {
 
   constructor(
     private countdownService:CountdownService,
+    public ts:TransliterationService,
   ) { }
+
+  trans(key:string, ...p:string[]):string {
+    return this.ts.trans(key, ...p);
+  }
 
   ngOnInit():void {
     this.tick$ = this.countdownService.countdown$(this.eventDate);
   }
 
   /**
-   * Map a CountdownTick to the 4 grid cells (with Indonesian labels).
+   * Map a CountdownTick to the 4 grid cells (label mengikuti bahasa aktif).
    * Falls back to zeroes while the first emission is pending.
    */
   cells(t:CountdownTick | null):{ label:string; value:number }[] {
     const safe = t ?? { days: 0, hours: 0, minutes: 0, seconds: 0, done: false };
     return [
-      { label: 'Hari', value: safe.days },
-      { label: 'Jam', value: safe.hours },
-      { label: 'Menit', value: safe.minutes },
-      { label: 'Detik', value: safe.seconds },
+      { label: this.ts.trans('countdown_days'), value: safe.days },
+      { label: this.ts.trans('countdown_hours'), value: safe.hours },
+      { label: this.ts.trans('countdown_minutes'), value: safe.minutes },
+      { label: this.ts.trans('countdown_seconds'), value: safe.seconds },
     ];
   }
 

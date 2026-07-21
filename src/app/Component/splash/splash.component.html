@@ -169,7 +169,7 @@
     <img class="sc-side" style="left:12px; bottom:27%; width:26px; transform:rotate(-40deg)"
          src="assets/splash/blossom.svg" alt="" />
 
-    <p class="welcome">Selamat Datang</p>
+    <p class="welcome">{{ trans('splash_welcome') }}</p>
 
     <div class="heart-wrap">
       <svg class="heart-photo" viewBox="0 0 100 92" preserveAspectRatio="xMidYMid meet">
@@ -249,10 +249,8 @@
       </svg>
     </div>
 
-    <p class="quote">&ldquo;Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan
-      pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa
-      tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.&rdquo;</p>
-    <p class="qs">QS. Ar-Rum : 21</p>
+    <p class="quote">{{ trans('splash_verse') }}</p>
+    <p class="qs">{{ trans('splash_verse_ref') }}</p>
 
     @for (p of driftPetals; track $index) {
       <div
@@ -274,17 +272,17 @@
   <!-- ============ SAPAAN + tombol, di atas backdrop ============ -->
   <div class="content">
     <p class="script animate-fade-in opacity-0" style="animation-delay: 0.1s">
-      The Wedding of
+      {{ trans('splash_the_wedding_of') }}
     </p>
 
     <p class="kepada animate-fade-in opacity-0" style="animation-delay: 0.6s">
-      Kepada Yth.
+      {{ trans('splash_to') }}
     </p>
     <h2 class="guest animate-fade-in opacity-0" style="animation-delay: 0.85s">
       {{ (guestService.currentGuest$ | async)?.name || 'Tamu Undangan' }}
     </h2>
     <p class="apology animate-fade-in opacity-0" style="animation-delay: 1.05s">
-      Mohon maaf apabila ada salah penulisan nama
+      {{ trans('splash_apology') }}
     </p>
 
     <button
@@ -293,7 +291,13 @@
       style="animation-delay: 1.4s"
       (click)="open()"
     >
-      Buka Undangan
+      {{ trans('splash_open') }}
     </button>
+
+    <div class="lang-toggle animate-fade-in opacity-0" style="animation-delay: 1.6s">
+      <button type="button" (click)="ts.setLang('id')" [class.active]="ts.isActive('id')">ID</button>
+      <span aria-hidden="true">·</span>
+      <button type="button" (click)="ts.setLang('en')" [class.active]="ts.isActive('en')">EN</button>
+    </div>
   </div>
 </div>

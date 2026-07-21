@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GuestService } from '../../Services/guest.service';
+import { TransliterationService } from '../../Services/transliteration.service';
 
 /**
  * Elemen flora yang ditabur ke layar (garland tepi gelombang,
@@ -104,6 +105,7 @@ export class SplashComponent {
 
   constructor(
     public guestService:GuestService,
+    public ts:TransliterationService,
   ) {
     // Respect prefers-reduced-motion, but allow forcing the animation with
     // "?motion" in the URL — see memory: reduced-motion-gotcha. Guests with
@@ -132,6 +134,10 @@ export class SplashComponent {
     this.buildSprinkles();
     this.buildHeartPetals();
     this.buildDriftPetals();
+  }
+
+  trans(key:string, ...p:string[]):string {
+    return this.ts.trans(key, ...p);
   }
 
   /** Open the flower wave. Timings mirror the prototype's CSS. */

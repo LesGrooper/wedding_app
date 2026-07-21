@@ -83,9 +83,13 @@
 
   <app-couple [groom]="env.groom" [bride]="env.bride" />
 
-  <app-countdown [eventDate]="env.eventDate" />
+  <app-countdown
+    [eventDate]="env.eventDate"
+    [akadTime]="env.events.akadTime"
+    [receptionTime]="env.events.receptionTime"
+  />
 
-  <app-story [stories]="env.story" />
+  <app-story />
 
   <app-gallery />
 
@@ -98,11 +102,14 @@
 
   <app-rsvp-form />
 
+  <app-gift [accounts]="env.gift" />
+
   <app-greetings-wall />
 
   <footer class="relative text-center pt-10 pb-20 text-xs text-muted">
-    <p class="font-script text-xl text-rose-dark mb-1">Thank You</p>
-    <p>Atas kehadiran &amp; doa restu Anda</p>
+    <p class="max-w-md mx-auto mb-6 px-6 text-sm leading-relaxed">{{ trans('footer_closing') }}</p>
+    <p class="font-script text-xl text-rose-dark mb-1">{{ trans('footer_thank_you') }}</p>
+    <p>{{ trans('footer_thanks_body') }}</p>
     <!-- reprise: sepasang burung hinggap berdampingan + satu kerlip -->
     <app-ambient-birds mode="perch" />
   </footer>
