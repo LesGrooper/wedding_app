@@ -90,3 +90,6 @@ Tanpa `?to=`, sapaan fallback "Tamu Undangan" dipakai. Slug juga ikut terkirim d
 - `.env`, `src/environments/environment*.ts`, dan file kredensial `wedding-app-*.json` sudah di-`.gitignore` — **jangan pernah di-commit**.
 - Nilai konfigurasi tetap terlihat di bundle JavaScript publik setelah deploy (wajar untuk data undangan). `.env` hanya menjaga data pribadi tidak masuk riwayat git.
 - File service account Google Cloud **tidak dibutuhkan** app ini — backend memakai Apps Script yang berjalan sebagai akun pemilik. Kalau ada key yang pernah terekspos, nonaktifkan di GCP Console (IAM → Service Accounts → Keys).
+
+## Source Backgrorund Music : 
+[`"Till There Was You", solo acoustic guitar`](www.youtube.com/watch?v=kSNogCdocvE&list=RDkSNogCdocvE)
