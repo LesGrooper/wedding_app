@@ -48,15 +48,16 @@ function get(key, { prod = false } = {}) {
   return v ?? '';
 }
 
-function buildStory() {
-  const story = [];
-  for (let i = 1; vars[`STORY_${i}_LABEL`] || vars[`STORY_${i}_TEXT`]; i++) {
-    story.push({
-      label: vars[`STORY_${i}_LABEL`] ?? '',
-      text: vars[`STORY_${i}_TEXT`] ?? '',
-    });
-  }
-  return story;
+// Rekening wedding gift — atas nama otomatis dari GROOM_NAME / BRIDE_NAME.
+// Entri di-skip kalau bank & nomornya kosong (mis. cuma pakai 1 rekening).
+function buildGift() {
+  const accounts = [
+    { bank: vars['GIFT_GROOM_BANK'], number: vars['GIFT_GROOM_NUMBER'], name: vars['GROOM_NAME'] },
+    { bank: vars['GIFT_BRIDE_BANK'], number: vars['GIFT_BRIDE_NUMBER'], name: vars['BRIDE_NAME'] },
+  ];
+  return accounts
+    .filter((a) => a.bank || a.number)
+    .map((a) => ({ bank: a.bank ?? '', number: a.number ?? '', name: a.name ?? '' }));
 }
 
 function buildEnvironment(production) {
@@ -64,14 +65,20 @@ function buildEnvironment(production) {
     production,
     appsScriptUrl: get('APPS_SCRIPT_URL', { prod: production }),
     eventDate: get('EVENT_DATE', { prod: production }),
+    events: {
+      akadTime: get('AKAD_TIME'),
+      receptionTime: get('RECEPTION_TIME'),
+    },
     groom: {
       name: get('GROOM_NAME'),
-      parents: get('GROOM_PARENTS'),
+      father: get('GROOM_FATHER'),
+      mother: get('GROOM_MOTHER'),
       photo: get('GROOM_PHOTO'),
     },
     bride: {
       name: get('BRIDE_NAME'),
-      parents: get('BRIDE_PARENTS'),
+      father: get('BRIDE_FATHER'),
+      mother: get('BRIDE_MOTHER'),
       photo: get('BRIDE_PHOTO'),
     },
     venue: {
@@ -80,7 +87,7 @@ function buildEnvironment(production) {
       mapsEmbedUrl: get('VENUE_MAPS_EMBED_URL'),
       mapsOpenUrl: get('VENUE_MAPS_OPEN_URL'),
     },
-    story: buildStory(),
+    gift: buildGift(),
   };
 }
 
@@ -106,4 +113,4 @@ mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, 'environment.ts'), render(dev), 'utf8');
 writeFileSync(join(outDir, 'environment.prod.ts'), render(prod), 'utf8');
 
-console.log(`[generate-env] OK — environment.ts & environment.prod.ts di-generate (${dev.story.length} story).`);
+console.log(`[generate-env] OK — environment.ts & environment.prod.ts di-generate (${dev.gift.length} rekening gift).`);
