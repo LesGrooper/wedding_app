@@ -12,6 +12,11 @@
   <app-floating-floral position="bottom-left" [size]="120" />
 
   <div class="relative z-10 max-w-2xl">
+    <!-- Emblem seal di atas "Simpan Tanggal" — dibingkai supaya terbaca sebagai
+         lambang, bukan pengulangan nama besar + "&" yang ada di bawahnya. -->
+    <!-- inline-block, jadi ikut ter-center oleh `text-center` di <section> -->
+    <app-monogram class="mb-4 @md:mb-5" [size]="72" />
+
     <p class="font-script text-3xl @md:text-4xl text-rose-dark mb-3">{{ trans('hero_save_the_date') }}</p>
     <div class="w-24 h-px bg-gold mx-auto mb-6"></div>
 

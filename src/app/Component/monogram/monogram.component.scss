@@ -1,0 +1,49 @@
+:host {
+  display: inline-block;
+  line-height: 0;
+}
+
+.monogram {
+  display: block;
+  overflow: visible;
+}
+
+/* Warna mengikuti tailwind.config.js — rose-dark / gold / gold-soft / ivory / ink */
+.letter {
+  fill: #b8848f;
+}
+
+.amp {
+  fill: #d4af37;
+}
+
+.sparkle {
+  fill: #e8d4a0;
+}
+
+.rule {
+  fill: #d4af37;
+  opacity: 0.8;
+}
+
+.ring {
+  fill: none;
+  stroke: #d4af37;
+  stroke-width: 1.6;
+  opacity: 0.85;
+}
+
+.ring-inner {
+  fill: none;
+  stroke: #d4af37;
+  stroke-width: 0.7;
+  opacity: 0.4;
+}
+
+.chip {
+  fill: #b8848f;
+}
+
+.chip-amp {
+  fill: #fffdfb;
+}

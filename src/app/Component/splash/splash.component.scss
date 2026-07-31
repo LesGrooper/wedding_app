@@ -371,6 +371,11 @@
   padding: 0 1.5rem;
 }
 
+.content .mark {
+  margin-bottom: 0.85rem;
+  filter: drop-shadow(0 1px 6px rgba(255, 255, 255, 0.7));
+}
+
 .content .script {
   font-family: 'Great Vibes', cursive;
   font-size: clamp(2rem, 6vw, 3rem);

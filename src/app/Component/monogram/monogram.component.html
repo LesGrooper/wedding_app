@@ -1,0 +1,56 @@
+@if (variant === 'full') {
+  <svg
+    class="monogram"
+    [attr.viewBox]="m.viewBox"
+    [style.width.px]="size"
+    [style.height.px]="size"
+    role="img"
+    aria-label="R & A"
+  >
+    <!-- ring emas tipis — efek wax seal -->
+    @if (framed) {
+      <circle class="ring" [attr.cx]="m.center" [attr.cy]="m.center" [attr.r]="m.ringOuter" />
+      <circle class="ring-inner" [attr.cx]="m.center" [attr.cy]="m.center" [attr.r]="m.ringInner" />
+    }
+
+    <!-- "there were stars in the sky" — sparkle 4-titik, motif yang sama
+         dipakai di splash & ambient-dawn -->
+    <path class="sparkle" [attr.d]="m.sparkle" [attr.transform]="m.sparkleTransform" />
+
+    <path class="letter" [attr.d]="m.letterR.d" [attr.transform]="m.letterR.transform" />
+    <path class="amp" [attr.d]="m.ampersand.d" [attr.transform]="m.ampersand.transform" />
+    <path class="letter" [attr.d]="m.letterA.d" [attr.transform]="m.letterA.transform" />
+
+    <!-- gema garis `w-24 h-px bg-gold` yang ada di bawah tiap judul section -->
+    <rect
+      class="rule"
+      [attr.x]="m.rule.x"
+      [attr.y]="m.rule.y"
+      [attr.width]="m.rule.w"
+      [attr.height]="m.rule.h"
+    />
+  </svg>
+} @else {
+  <svg
+    class="monogram"
+    [attr.viewBox]="m.compactViewBox"
+    [style.width.px]="size"
+    [style.height.px]="size"
+    role="img"
+    aria-label="R & A"
+  >
+    <rect
+      class="chip"
+      x="0"
+      y="0"
+      [attr.width]="m.compact.size"
+      [attr.height]="m.compact.size"
+      [attr.rx]="m.compact.rx"
+    />
+    <path
+      class="chip-amp"
+      [attr.d]="m.compact.ampersand.d"
+      [attr.transform]="m.compact.ampersand.transform"
+    />
+  </svg>
+}

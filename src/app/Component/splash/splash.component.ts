@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GuestService } from '../../Services/guest.service';
 import { TransliterationService } from '../../Services/transliteration.service';
+import { MonogramComponent } from '../monogram/monogram.component';
 
 /**
  * Elemen flora yang ditabur ke layar (garland tepi gelombang,
@@ -42,7 +43,7 @@ interface DriftPetal {
 @Component({
   selector: 'app-splash',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MonogramComponent],
   templateUrl: './splash.component.html',
   styleUrls: ['./splash.component.scss'],
 })

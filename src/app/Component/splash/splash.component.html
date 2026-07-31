@@ -271,6 +271,15 @@
 
   <!-- ============ SAPAAN + tombol, di atas backdrop ============ -->
   <div class="content">
+    <!-- Monogram di slot paling atas. Delay 0s = beat "greeting fade" di
+         storyboard splash.component.ts; delay baris-baris di bawah JANGAN
+         digeser, semuanya terkunci ke tempo lagu ~62 BPM. -->
+    <app-monogram
+      class="mark animate-fade-in opacity-0"
+      style="animation-delay: 0s"
+      [size]="84"
+    />
+
     <p class="script animate-fade-in opacity-0" style="animation-delay: 0.1s">
       {{ trans('splash_the_wedding_of') }}
     </p>

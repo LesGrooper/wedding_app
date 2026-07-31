@@ -2,41 +2,16 @@
 // Dipanggil otomatis oleh `pnpm start` / `pnpm run build` (lihat package.json),
 // atau manual: pnpm run config:env
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseEnvFile } from './lib/env.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const envPath = join(root, '.env');
 const outDir = join(root, 'src', 'environments');
 
-let raw;
-try {
-  raw = readFileSync(envPath, 'utf8');
-} catch {
-  console.error('[generate-env] File .env tidak ditemukan di root project.');
-  console.error('[generate-env] Salin .env.example menjadi .env lalu isi nilainya.');
-  process.exit(1);
-}
-
-/* ---------- Parse .env (KEY=VALUE per baris, # = komentar) ---------- */
-
-const vars = {};
-for (const line of raw.split(/\r?\n/)) {
-  const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith('#')) continue;
-  const eq = trimmed.indexOf('=');
-  if (eq <= 0) continue;
-  const key = trimmed.slice(0, eq).trim();
-  let value = trimmed.slice(eq + 1).trim();
-  if (
-    (value.startsWith('"') && value.endsWith('"') && value.length >= 2) ||
-    (value.startsWith("'") && value.endsWith("'") && value.length >= 2)
-  ) {
-    value = value.slice(1, -1);
-  }
-  vars[key] = value;
-}
+const vars = parseEnvFile(envPath, 'generate-env');
 
 /* ---------- Ambil nilai (dengan override *_PROD opsional) ---------- */
 

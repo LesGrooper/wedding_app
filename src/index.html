@@ -7,12 +7,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Undangan pernikahan — kehadiran Anda adalah kebahagiaan kami.">
 
+  <!-- PENTING saat deploy: ganti https://CHANGEME.example/ dengan domain asli.
+       WhatsApp & Facebook tidak me-resolve path relatif pada og:image, jadi
+       tanpa URL absolut kartu preview link tidak akan pernah muncul. -->
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Undangan Pernikahan">
+  <meta property="og:locale" content="id_ID">
   <meta property="og:title" content="Undangan Pernikahan">
   <meta property="og:description" content="Kami mengundang Anda untuk hadir di hari bahagia kami.">
-  <meta property="og:image" content="assets/images/og-cover.jpg">
+  <meta property="og:url" content="https://CHANGEME.example/">
+  <meta property="og:image" content="https://CHANGEME.example/assets/images/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Monogram R & A — undangan pernikahan">
+  <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Brand mark R & A — di-generate oleh `pnpm run icons` -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#FFFDFB">
+  <meta name="apple-mobile-web-app-title" content="R & A">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

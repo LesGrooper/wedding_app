@@ -23,6 +23,11 @@ npm-debug.log*
 /src/environments/environment.ts
 /src/environments/environment.prod.ts
 
+# Cache font TTF untuk scripts/generate-icons.mjs — diunduh otomatis saat
+# `pnpm run icons`, tidak perlu masuk repo (±1,6 MB). Aset hasilnya di
+# public/ yang justru WAJIB di-commit.
+/scripts/fonts/
+
 # Kredensial Google Cloud service account — JANGAN pernah di-commit
 wedding-app-*.json
 *-service-account*.json

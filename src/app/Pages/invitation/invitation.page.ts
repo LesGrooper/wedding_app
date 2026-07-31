@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 import { environment } from '../../../environments/environment';
 import { GuestService } from '../../Services/guest.service';
@@ -74,10 +75,16 @@ export class InvitationPage {
   constructor(
     public guestService:GuestService,
     public ts:TransliterationService,
+    private title:Title,
   ) {
     // Lock background scrolling while the splash is on top of the page.
     // Restored in onOpen() when the user dismisses the splash.
     document.body.classList.add('no-scroll');
+
+    // Judul tab diisi saat runtime, bukan dihardcode di index.html: .env dan
+    // src/environments/* sengaja gitignored supaya data mempelai tidak ikut
+    // ter-commit. <title> statis di index.html tinggal jadi fallback.
+    this.title.setTitle(`${this.env.groom.name} & ${this.env.bride.name} — Undangan Pernikahan`);
   }
 
   trans(key:string, ...p:string[]):string {

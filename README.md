@@ -73,6 +73,27 @@ curl.exe -sL "$URL`?action=greetings"
 | `pnpm run watch` | Build development mode watch |
 | `pnpm run test` | Unit test via Karma |
 | `pnpm run config:env` | Generate ulang `environment.*.ts` dari `.env` saja |
+| `pnpm run icons` | Generate ulang brand mark: favicon, icon PWA, OG cover (lihat bawah) |
+
+## Brand mark & icon
+
+Monogram **R & A** adalah satu-satunya sumber identitas visual: favicon, icon PWA/home-screen, dan gambar preview link. Semuanya di-generate dari `scripts/generate-icons.mjs`:
+
+```
+pnpm run icons
+```
+
+Menghasilkan → `public/favicon.svg` · `favicon.ico` (16+32) · `favicon-32.png` · `apple-touch-icon.png` (180) · `icon-192.png` · `icon-512.png` · `icon-512-maskable.png` · `public/assets/images/og-cover.jpg` (1200×630, memuat nama & tanggal dari `.env`) · `src/app/Component/monogram/monogram.paths.ts` (dipakai `<app-monogram>` di splash & hero).
+
+Catatan:
+
+- **Tidak** ikut `pnpm run build` — aset icon nyaris tidak pernah berubah dan build tidak boleh butuh jaringan. Jalankan manual, lalu **commit hasilnya**.
+- Sekali jalan pertama, dua font TTF (Cormorant Garamond & Great Vibes, OFL-1.1) diunduh ke `scripts/fonts/` yang di-`.gitignore`. Kalau jaringan diblokir, unduh manual ke folder itu — pesan errornya menyebutkan URL-nya.
+- Huruf di-**outline jadi `<path>`**, bukan `<text>`: favicon SVG dirender di luar konteks dokumen sehingga webfont Google Fonts tidak ikut dimuat.
+
+### ⚠️ Wajib diisi saat deploy
+
+`src/index.html` memakai placeholder `https://CHANGEME.example/` pada `og:url` dan `og:image`. **Ganti dengan domain asli** — WhatsApp dan Facebook tidak me-resolve path relatif pada `og:image`, jadi selama masih placeholder kartu preview link tidak akan muncul.
 
 ## Link undangan personal
 
