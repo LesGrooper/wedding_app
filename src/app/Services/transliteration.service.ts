@@ -35,12 +35,12 @@ export const TRANSLATIONS: Record<Lang, Record<string, Value>> = {
     hero_for_guest: 'Untuk',
     // couple
     couple_title: 'Mempelai',
-    couple_groom_parents: (f, m) => `Putra dari Bapak ${f} & Ibu ${m}`,
-    couple_bride_parents: (f, m) => `Putri dari Bapak ${f} & Ibu ${m}`,
+    couple_groom_parents: (f, m) => `Putra dari Bapak ${f} \n & Ibu ${m}`,
+    couple_bride_parents: (f, m) => `Putri dari Bapak ${f} \n & Ibu ${m}`,
     // countdown
     countdown_title: 'Menghitung Hari',
     countdown_akad: 'Akad Nikah',
-    countdown_reception: 'Resepsi',
+    countdown_reception: 'Perjamuan',
     countdown_days: 'Hari',
     countdown_hours: 'Jam',
     countdown_minutes: 'Menit',
@@ -110,12 +110,12 @@ export const TRANSLATIONS: Record<Lang, Record<string, Value>> = {
     hero_for_guest: 'To',
     // couple
     couple_title: 'The Couple',
-    couple_groom_parents: (f, m) => `Son of Mr. ${f} & Mrs. ${m}`,
-    couple_bride_parents: (f, m) => `Daughter of Mr. ${f} & Mrs. ${m}`,
+    couple_groom_parents: (f, m) => `Son of Mr. ${f} \n & Mrs. ${m}`,
+    couple_bride_parents: (f, m) => `Daughter of Mr. ${f} \n & Mrs. ${m}`,
     // countdown
     countdown_title: 'Counting the Days',
     countdown_akad: 'Ceremony',
-    countdown_reception: 'Reception',
+    countdown_reception: 'Luncheon',
     countdown_days: 'Days',
     countdown_hours: 'Hours',
     countdown_minutes: 'Minutes',

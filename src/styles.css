@@ -14,6 +14,18 @@
   /* Lebar kolom undangan di desktop (>=1024px): app dikurung selebar
      HP di kiri, sisa layar jadi panel foto prewedding. */
   --invite-col-w: 430px;
+
+  /* Tumpukan overlay — SATU skala, urut dari paling atas:
+       splash    : menutup semua selama pembukaan
+       toast     : notifikasi harus selalu terlihat, termasuk di atas lightbox
+       lightbox  : foto galeri fullscreen
+       bgm       : tombol musik mengambang
+     Pakai token ini (z-[var(--z-*)]), jangan tulis angka mentah lagi —
+     dulu lightbox 9998 vs tombol BGM 9999 bikin tombol musik nimpa foto. */
+  --z-splash: 10000;
+  --z-toast: 9900;
+  --z-lightbox: 9800;
+  --z-bgm: 9700;
 }
 
 html, body {

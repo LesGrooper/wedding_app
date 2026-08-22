@@ -340,8 +340,8 @@ export class SplashComponent {
     const ring = (n:number, sx:number, sy:number, wMin:number, wVar:number, op:number):void => {
       for (let i = 0; i < n; i++) {
         const t = (i / n) * Math.PI * 2;
-        const x = 16 * Math.pow(Math.sin(t), 3);
-        const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+        const x = 21 * Math.pow(Math.sin(t), 3);
+        const y = 15 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
         const px = 50 + (x / 16) * sx;
         const py = 50 - ((y + 2.5) / 14.5) * sy;
         const ang = Math.atan2(py - 50, px - 50) * 180 / Math.PI - 90 + (this.rnd() - 0.5) * 24;
