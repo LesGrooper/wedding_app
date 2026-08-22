@@ -55,5 +55,3 @@ resources/android/**/*
 /.editorconfig
 # Backend Apps Script — sumber kebenarannya ada di editor script.google.com
 apps-script
-
-pnpm-lock.yaml
