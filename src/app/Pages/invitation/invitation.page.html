@@ -31,7 +31,7 @@
   <button
     type="button"
     (click)="toggleMute()"
-    class="bgm-btn fixed bottom-5 right-5 z-[var(--z-bgm)] flex h-12 w-12 items-center justify-center rounded-full bg-rose text-white border border-gold/40 shadow-soft transition hover:bg-rose-dark"
+    class="bgm-btn fixed bottom-5 right-5 z-[var(--z-bgm)] flex h-12 w-12 items-center justify-center rounded-full bg-rose text-on-rose border border-gold/40 shadow-soft transition hover:bg-rose-hover"
     [attr.aria-label]="muted() ? 'Nyalakan musik' : 'Matikan musik'"
     [attr.aria-pressed]="muted()"
   >
@@ -77,16 +77,17 @@
   <app-hero
     [groom]="env.groom.name"
     [bride]="env.bride.name"
-    [formattedDate]="env.eventDate | formatDate: 'EEEE, d MMMM yyyy'"
+    [eventLabel]="trans('event_label_' + eventKey)"
+    [formattedDate]="event.eventDate | formatDate: 'EEEE, d MMMM yyyy'"
     [guestName]="(guestService.currentGuest$ | async)?.name || 'Tamu Undangan'"
   />
 
   <app-couple [groom]="env.groom" [bride]="env.bride" />
 
   <app-countdown
-    [eventDate]="env.eventDate"
-    [akadTime]="env.events.akadTime"
-    [receptionTime]="env.events.receptionTime"
+    [eventDate]="event.eventDate"
+    [akadTime]="event.akadTime"
+    [receptionTime]="event.receptionTime"
   />
 
   <app-story />
@@ -94,10 +95,10 @@
   <app-gallery />
 
   <app-location
-    [name]="env.venue.name"
-    [address]="env.venue.address"
-    [embedUrl]="env.venue.mapsEmbedUrl"
-    [openUrl]="env.venue.mapsOpenUrl"
+    [name]="event.venue.name"
+    [address]="event.venue.address"
+    [embedUrl]="event.venue.mapsEmbedUrl"
+    [openUrl]="event.venue.mapsOpenUrl"
   />
 
   <app-rsvp-form />

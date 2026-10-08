@@ -28,7 +28,8 @@ export class AmbientNotesComponent implements OnInit, OnChanges {
 
   notes:Note[] = [];
 
-  private readonly colors:string[] = ['#D8A7B1', '#E8D4A0', '#B8848F'];
+  /** Token tema (src/styles.css) — ikut berganti per ?acara=. */
+  private readonly colors:string[] = ['var(--color-rose)', 'var(--color-gold-soft)', 'var(--color-rose-dark)'];
 
   ngOnInit():void {
     this.buildNotes();

@@ -3,18 +3,29 @@ module.exports = {
   content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
+      // Warna tema dari CSS variable (src/styles.css) supaya bisa berganti per
+      // ?acara= tanpa build terpisah. Bentuk rgb(var(--rgb-x) / <alpha-value>)
+      // WAJIB: dengan var(--color-x) biasa, Tailwind tak bisa mem-parse warnanya
+      // dan semua kelas opacity (border-gold/40, bg-ink/80, ...) diam-diam hilang.
       colors: {
-        ivory: '#FFFDFB',
+        ivory: 'rgb(var(--rgb-ivory) / <alpha-value>)',
         rose: {
-          DEFAULT: '#D8A7B1',
-          dark: '#B8848F',
+          DEFAULT: 'rgb(var(--rgb-rose) / <alpha-value>)',
+          dark: 'rgb(var(--rgb-rose-dark) / <alpha-value>)',
+          // latar hover & toast danger — terpisah dari rose-dark (teks judul)
+          hover: 'rgb(var(--rgb-rose-hover) / <alpha-value>)',
         },
+        // teks di atas permukaan rose (tombol, pill, toast)
+        'on-rose': 'rgb(var(--rgb-on-rose) / <alpha-value>)',
         gold: {
-          DEFAULT: '#D4AF37',
-          soft: '#E8D4A0',
+          DEFAULT: 'rgb(var(--rgb-gold) / <alpha-value>)',
+          soft: 'rgb(var(--rgb-gold-soft) / <alpha-value>)',
         },
-        ink: '#3B3138',
-        muted: '#8B7B82',
+        ink: 'rgb(var(--rgb-ink) / <alpha-value>)',
+        muted: 'rgb(var(--rgb-muted) / <alpha-value>)',
+        // Overlay yang harus selalu gelap (lightbox). Jangan pakai ink:
+        // di tema gelap ink = cream.
+        scrim: 'rgb(var(--rgb-scrim) / <alpha-value>)',
       },
       fontFamily: {
         serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
@@ -30,8 +41,8 @@ module.exports = {
         md: '768px',
       },
       boxShadow: {
-        glass: '0 8px 32px rgba(184,132,143,0.15)',
-        soft: '0 4px 20px rgba(184,132,143,0.08)',
+        glass: '0 8px 32px rgb(var(--rgb-rose-dark) / 0.15)',
+        soft: '0 4px 20px rgb(var(--rgb-rose-dark) / 0.08)',
       },
       animation: {
         // float: 'float 10s ease-in-out infinite alternate',

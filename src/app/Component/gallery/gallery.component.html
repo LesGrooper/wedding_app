@@ -8,17 +8,29 @@
 
   <!-- Reveal seluruh reel sebagai satu unit (bukan per-kartu) -->
   <div appReveal>
+    <!-- Autoplay tiap 5 detik; berhenti selama disentuh/di-hover/fokus keyboard,
+         saat lightbox terbuka, atau saat reel di luar layar. -->
+    <div
+      class="relative"
+      (pointerenter)="onPointerEnter($event)"
+      (pointerleave)="onPointerLeave($event)"
+      (pointerdown)="onPointerDown($event)"
+      (pointerup)="onPointerUp()"
+      (pointercancel)="onPointerUp()"
+      (focusin)="onFocusIn($event)"
+      (focusout)="onFocusOut()"
+    >
     <!-- Strip horizontal: swipe / drag, snap ke tengah, kartu berikut ngintip -->
     <div
       #reel
       class="reel flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth px-[14%]"
       (scroll)="onScroll()"
     >
-      @for (img of images; track img) {
+      @for (img of images; track img; let i = $index) {
         <button
           type="button"
-          class="snap-center shrink-0 w-[72%] aspect-square overflow-hidden rounded-lg border border-gold/30 shadow-soft cursor-zoom-in"
-          (click)="open(img)"
+          class="photo-frame snap-center shrink-0 w-[72%] aspect-square overflow-hidden rounded-lg border border-gold/30 shadow-soft cursor-zoom-in"
+          (click)="open(i)"
         >
           <img
             [src]="img"
@@ -30,6 +42,29 @@
           />
         </button>
       }
+    </div>
+
+    <!-- Panah di atas kartu yang ngintip; berputar di kedua ujung -->
+    <button
+      type="button"
+      class="absolute left-1 top-1/2 -translate-y-1/2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-ivory/80 text-ink border border-gold/40 shadow-soft backdrop-blur-sm transition hover:bg-ivory"
+      (click)="slide(-1)"
+      aria-label="Foto sebelumnya"
+    >
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="absolute right-1 top-1/2 -translate-y-1/2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-ivory/80 text-ink border border-gold/40 shadow-soft backdrop-blur-sm transition hover:bg-ivory"
+      (click)="slide(1)"
+      aria-label="Foto berikutnya"
+    >
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </button>
     </div>
 
     <!-- Titik indikator: menandai posisi, bisa diklik untuk lompat -->
@@ -46,12 +81,57 @@
     </div>
   </div>
 
-  @if (active()) {
+  @if (lightboxSrc(); as src) {
+    <!-- Tutup: tap latar, tombol ×, atau Esc. Ganti foto: panah, ←/→, atau swipe.
+         Tap di foto sengaja tidak menutup — terlalu mudah kena saat swipe. -->
     <div
-      class="fixed inset-0 z-[var(--z-lightbox)] bg-ink/80 flex items-center justify-center p-6 backdrop-blur-sm"
+      class="fixed inset-0 z-[var(--z-lightbox)] bg-scrim/80 flex items-center justify-center p-6 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Pratinjau foto"
       (click)="close()"
     >
-      <img [src]="active()" alt="" class="max-h-full max-w-full rounded-lg shadow-glass" />
+      <img
+        [src]="src"
+        alt=""
+        draggable="false"
+        class="max-h-full max-w-full rounded-lg shadow-glass select-none touch-pan-y touch-pinch-zoom"
+        (click)="$event.stopPropagation()"
+        (pointerdown)="onSwipeStart($event)"
+        (pointerup)="onSwipeEnd($event)"
+        (pointercancel)="cancelSwipe()"
+      />
+
+      <button
+        type="button"
+        class="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/80 text-ink border border-gold/40 shadow-soft transition hover:bg-ivory"
+        (click)="close(); $event.stopPropagation()"
+        aria-label="Tutup"
+      >
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="absolute left-3 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-ivory/80 text-ink border border-gold/40 shadow-soft transition hover:bg-ivory"
+        (click)="step(-1); $event.stopPropagation()"
+        aria-label="Foto sebelumnya"
+      >
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="absolute right-3 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-ivory/80 text-ink border border-gold/40 shadow-soft transition hover:bg-ivory"
+        (click)="step(1); $event.stopPropagation()"
+        aria-label="Foto berikutnya"
+      >
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
     </div>
   }
 </section>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ApiService } from '../../Services/api.service';
+import { EventService } from '../../Services/event.service';
 import { GuestService } from '../../Services/guest.service';
 import { ToastService } from '../../Services/toast.service';
 import { Greeting } from '../../Models/greeting.model';
@@ -35,6 +36,7 @@ export class GreetingsWallComponent implements OnInit {
   constructor(
     private formBuilder:FormBuilder,
     private apiService:ApiService,
+    private eventService:EventService,
     private guestService:GuestService,
     private toastService:ToastService,
     public ts:TransliterationService,
@@ -76,7 +78,7 @@ export class GreetingsWallComponent implements OnInit {
 
     const v = this.form.getRawValue();
     const slug = this.guestService.getSlug();
-    const res = await this.apiService.submitGreeting({ slug, name: v.name, message: v.message });
+    const res = await this.apiService.submitGreeting({ event: this.eventService.key, slug, name: v.name, message: v.message });
     this.submitting.set(false);
 
     if (res.ok) {

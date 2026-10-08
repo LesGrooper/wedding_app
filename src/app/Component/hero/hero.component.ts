@@ -16,6 +16,8 @@ export class HeroComponent {
 
   @Input("groom") groom:string = '';
   @Input("bride") bride:string = '';
+  /** Penanda acara (mis. "Ngunduh Mantu") supaya tamu tahu undangan yang mana. */
+  @Input("eventLabel") eventLabel:string = '';
   @Input("formattedDate") formattedDate:string = '';
   @Input("guestName") guestName:string = 'Tamu Undangan';
 

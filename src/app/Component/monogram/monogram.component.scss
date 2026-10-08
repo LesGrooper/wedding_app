@@ -8,42 +8,43 @@
   overflow: visible;
 }
 
-/* Warna mengikuti tailwind.config.js — rose-dark / gold / gold-soft / ivory / ink */
+/* Warna dari token tema (src/styles.css) — ikut berganti per ?acara=.
+   Favicon & icon statis tetap palet Banjar (scripts/generate-icons.mjs). */
 .letter {
-  fill: #b8848f;
+  fill: var(--color-rose-dark);
 }
 
 .amp {
-  fill: #d4af37;
+  fill: var(--color-gold);
 }
 
 .sparkle {
-  fill: #e8d4a0;
+  fill: var(--color-gold-soft);
 }
 
 .rule {
-  fill: #d4af37;
+  fill: var(--color-gold);
   opacity: 0.8;
 }
 
 .ring {
   fill: none;
-  stroke: #d4af37;
+  stroke: var(--color-gold);
   stroke-width: 1.6;
   opacity: 0.85;
 }
 
 .ring-inner {
   fill: none;
-  stroke: #d4af37;
+  stroke: var(--color-gold);
   stroke-width: 0.7;
   opacity: 0.4;
 }
 
 .chip {
-  fill: #b8848f;
+  fill: var(--color-rose-dark);
 }
 
 .chip-amp {
-  fill: #fffdfb;
+  fill: var(--color-ivory);
 }

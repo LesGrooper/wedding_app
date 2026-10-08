@@ -31,7 +31,7 @@
   width: 26px;
   height: auto;
   fill: none;
-  stroke: #8B7B82;
+  stroke: var(--color-muted);
   stroke-width: 1.7;
   stroke-linecap: round;
   animation: bob 3.9s ease-in-out infinite alternate;
@@ -40,7 +40,7 @@
 
 .bird-small {
   width: 19px;
-  stroke: #B8848F;
+  stroke: var(--color-rose-dark);
   animation-delay: 1.4s;
 }
 

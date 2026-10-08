@@ -10,9 +10,9 @@
       [class.text-ink]="t.kind === 'success'"
       [class.border-gold]="t.kind === 'success'"
       [class.bg-rose]="t.kind === 'warning'"
-      [class.text-white]="t.kind === 'warning' || t.kind === 'danger'"
+      [class.text-on-rose]="t.kind === 'warning' || t.kind === 'danger'"
       [class.border-rose-dark]="t.kind === 'warning'"
-      [class.bg-rose-dark]="t.kind === 'danger'"
+      [class.bg-rose-hover]="t.kind === 'danger'"
       (click)="toast.dismiss(t.id)"
     >
       {{ t.message }}
