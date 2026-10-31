@@ -8,13 +8,17 @@ import { readFileSync } from 'node:fs';
  * Baca & parse file .env menjadi objek datar { KEY: 'value' }.
  * @param {string} envPath  path absolut ke file .env
  * @param {string} tag      prefix log pemanggil, mis. 'generate-icons'
- * @returns {Record<string, string>}
+ * @param {{optional?: boolean}} opts  optional: kembalikan null (bukan exit)
+ *        kalau file tidak ada — dipakai saat build di CI/Vercel, yang
+ *        nilainya datang dari Environment Variables, bukan dari file.
+ * @returns {Record<string, string> | null}
  */
-export function parseEnvFile(envPath, tag = 'env') {
+export function parseEnvFile(envPath, tag = 'env', { optional = false } = {}) {
   let raw;
   try {
     raw = readFileSync(envPath, 'utf8');
   } catch {
+    if (optional) return null;
     console.error(`[${tag}] File .env tidak ditemukan di root project.`);
     console.error(`[${tag}] Salin .env.example menjadi .env lalu isi nilainya.`);
     process.exit(1);

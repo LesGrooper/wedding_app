@@ -11,7 +11,19 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const envPath = join(root, '.env');
 const outDir = join(root, 'src', 'environments');
 
-const vars = parseEnvFile(envPath, 'generate-env');
+// Dua sumber nilai:
+//   .env            — dipakai saat kerja lokal, dan menang kalau keduanya ada.
+//   process.env     — dipakai saat build di Vercel/CI, yang tidak punya file
+//                     .env karena file itu di-gitignore (berisi data pribadi).
+const fileVars = parseEnvFile(envPath, 'generate-env', { optional: true });
+if (!fileVars && !process.env['EVENTS']) {
+  console.error('[generate-env] Tidak ada file .env, dan EVENTS juga tidak ada di environment variable.');
+  console.error('[generate-env] Lokal : salin .env.example jadi .env lalu isi nilainya.');
+  console.error('[generate-env] Vercel: isi Project Settings → Environment Variables (daftar kuncinya ada di .env.example).');
+  process.exit(1);
+}
+if (!fileVars) console.log('[generate-env] File .env tidak ada — memakai environment variable (mode CI/Vercel).');
+const vars = { ...process.env, ...(fileVars ?? {}) };
 
 /* ---------- Ambil nilai (dengan override *_PROD opsional) ---------- */
 
