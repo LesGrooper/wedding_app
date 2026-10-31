@@ -5,14 +5,18 @@
     {{ eventDate | formatDate: 'EEEE, d MMMM yyyy' }}
   </p>
 
-  <!-- Jadwal: teks bebas dari .env (ujung bisa "Selesai"), dirender apa adanya -->
+  <!-- Jadwal: teks bebas dari .env (ujung bisa "Selesai"), dirender apa adanya.
+       Akad opsional — ngunduh mantu tidak ada akad, jadi kolomnya + garis
+       pemisahnya hilang dan kolom perjamuan kembali ke tengah. -->
   <div class="mb-10 flex items-center justify-center gap-5 @md:gap-8" appReveal>
-    <div class="text-right">
-      <p class="text-[10px] @md:text-xs uppercase tracking-[0.25em] text-muted">{{ trans('countdown_akad') }}</p>
-      <p class="mt-1 text-sm text-ink">{{ akadTime }}</p>
-    </div>
-    <div class="self-stretch w-px bg-gold/60"></div>
-    <div class="text-left">
+    @if (akadTime) {
+      <div class="text-right">
+        <p class="text-[10px] @md:text-xs uppercase tracking-[0.25em] text-muted">{{ trans('countdown_akad') }}</p>
+        <p class="mt-1 text-sm text-ink">{{ akadTime }}</p>
+      </div>
+      <div class="self-stretch w-px bg-gold/60"></div>
+    }
+    <div [class.text-left]="!!akadTime">
       <p class="text-[10px] @md:text-xs uppercase tracking-[0.25em] text-muted">{{ trans('countdown_reception') }}</p>
       <p class="mt-1 text-sm text-ink">{{ receptionTime }}</p>
     </div>

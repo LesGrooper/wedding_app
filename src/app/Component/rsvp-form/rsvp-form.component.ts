@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ApiService } from '../../Services/api.service';
+import { EventService } from '../../Services/event.service';
 import { GuestService } from '../../Services/guest.service';
 import { ToastService } from '../../Services/toast.service';
 import { GetStorage, SetStorage, RSVP_FLAG } from '../../Services/storage.service';
@@ -31,7 +32,7 @@ export class RsvpFormComponent implements OnInit {
 
   /**
    * Locks the form once the guest has already confirmed.
-   * Hydrated from localStorage on init via RSVP_FLAG(slug).
+   * Hydrated from localStorage on init via RSVP_FLAG(event, slug).
    */
   alreadySubmitted = signal(false);
 
@@ -50,6 +51,7 @@ export class RsvpFormComponent implements OnInit {
   constructor(
     private formBuilder:FormBuilder,
     private apiService:ApiService,
+    private eventService:EventService,
     private guestService:GuestService,
     private toastService:ToastService,
     public ts:TransliterationService,
@@ -57,7 +59,7 @@ export class RsvpFormComponent implements OnInit {
     this.form = this.formBuilder.nonNullable.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       status: ['' as RsvpStatus, Validators.required],
-      partner_count: [{ value: 1, disabled: true }, [Validators.required, Validators.min(1), Validators.max(1)]],
+      partner_count: [{ value: 2, disabled: true }, [Validators.required, Validators.min(1), Validators.max(1)]],
       message: [''],
     });
   }
@@ -69,7 +71,7 @@ export class RsvpFormComponent implements OnInit {
       if (g?.name && !this.form.controls.name.dirty) {
         this.form.controls.name.setValue(g.name);
       }
-      const flag = await GetStorage<boolean>(RSVP_FLAG(g?.slug ?? ''));
+      const flag = await GetStorage<boolean>(RSVP_FLAG(this.eventService.key, g?.slug ?? ''));
       this.alreadySubmitted.set(!!flag);
     });
   }
@@ -81,6 +83,7 @@ export class RsvpFormComponent implements OnInit {
     const slug = this.guestService.getSlug();
     const v = this.form.getRawValue();
     const payload:RsvpPayload = {
+      event: this.eventService.key,
       slug,
       name: v.name,
       status: v.status,
@@ -93,7 +96,7 @@ export class RsvpFormComponent implements OnInit {
     this.submitting.set(false);
 
     if (res.ok) {
-      await SetStorage(RSVP_FLAG(slug), true);
+      await SetStorage(RSVP_FLAG(this.eventService.key, slug), true);
       this.alreadySubmitted.set(true);
       this.toastService.toastSuccess(this.ts.trans('rsvp_toast_ok'));
     } else {

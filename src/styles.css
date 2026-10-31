@@ -2,14 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ================================================================
+   TEMA WARNA per acara (?acara=banjar / ?acara=cimahi)
+
+   Tiap warna punya DUA token:
+     --rgb-*    channel "R G B" — SATU-SATUNYA yang di-override per tema.
+                Bentuk channel wajib: Tailwind memakainya sebagai
+                rgb(var(--rgb-x) / <alpha-value>) supaya kelas opacity seperti
+                border-gold/40 tetap ter-generate (lihat tailwind.config.js).
+     --color-*  warna penuh rgb(var(--rgb-*)) — dipakai di SCSS & SVG.
+                Hanya dideklarasikan di :root, jangan di-override.
+
+   data-acara dipasang di <html> oleh skrip inline di src/index.html, sebelum
+   paint pertama. Harus di <html> (elemen yang sama dengan :root): alias
+   --color-* di-resolve di elemen tempat ia dideklarasikan, jadi override
+   --rgb-* di elemen yang lebih bawah tidak akan mengubah alias.
+
+   Tint dihitung manual per tema, bukan color-mix() saat runtime: color-mix
+   berisi var() gagal di iOS < 16.2 tanpa fallback.
+
+   Catatan build: inlineCritical dimatikan di angular.json — Beasties membuang
+   blok [data-acara] dari critical CSS (HTML statis tak punya atributnya),
+   yang bikin tamu Cimahi sempat melihat warna Banjar.
+   ================================================================ */
+
 :root {
-  --color-ivory: #FFFDFB;
-  --color-rose: #D8A7B1;
-  --color-rose-dark: #B8848F;
-  --color-gold: #D4AF37;
-  --color-gold-soft: #E8D4A0;
-  --color-ink: #3B3138;
-  --color-muted: #8B7B82;
+  /* ---- Banjar (default) — rose & emas ---- */
+  --rgb-ivory: 255 253 251;       /* #FFFDFB */
+  --rgb-rose: 216 167 177;        /* #D8A7B1 */
+  --rgb-rose-dark: 184 132 143;   /* #B8848F */
+  --rgb-gold: 212 175 55;         /* #D4AF37 */
+  --rgb-gold-soft: 232 212 160;   /* #E8D4A0 */
+  --rgb-ink: 59 49 56;            /* #3B3138 */
+  --rgb-muted: 139 123 130;       /* #8B7B82 */
+
+  /* tint turunan — bukit, mawar ambient, sapuan cat air splash */
+  --rgb-blush: 244 232 228;       /* #F4E8E4 */
+  --rgb-blush-deep: 239 224 216;  /* #EFE0D8 */
+  --rgb-rose-soft: 230 188 196;   /* #E6BCC4 */
+  --rgb-rose-pale: 243 215 220;   /* #F3D7DC */
+  --rgb-wash-rose: 247 233 227;   /* #F7E9E3 */
+  --rgb-wash-cream: 251 243 231;  /* #FBF3E7 */
+  --rgb-wash-ivory: 251 244 239;  /* #FBF4EF */
+  --rgb-wash-blush: 247 235 228;  /* #F7EBE4 */
+  --rgb-wash-peach: 250 240 234;  /* #FAF0EA */
+  --rgb-wash-sand: 245 229 221;   /* #F5E5DD */
+
+  /* peran, bukan warna — terpisah supaya tema gelap tidak membaliknya:
+       scrim : overlay & bayangan yang HARUS gelap (lightbox, drop-shadow).
+               Dulu memakai ink, yang di tema gelap berubah jadi cream.
+       glow  : sorotan yang lebih terang dari latar (pusat gradien). */
+  --rgb-scrim: 59 49 56;          /* = ink Banjar */
+  --rgb-glow: 255 255 255;
+  /*   on-rose    : teks di atas permukaan rose (tombol, pill, toast).
+       rose-hover : latar hover/toast danger. Dulu memakai rose-dark, yang di
+                    tema gelap harus terang karena juga dipakai untuk judul. */
+  --rgb-on-rose: 255 255 255;
+  --rgb-rose-hover: 184 132 143;  /* = rose-dark Banjar */
+
+  /* alias warna penuh — jangan di-override per tema */
+  --color-ivory: rgb(var(--rgb-ivory));
+  --color-rose: rgb(var(--rgb-rose));
+  --color-rose-dark: rgb(var(--rgb-rose-dark));
+  --color-gold: rgb(var(--rgb-gold));
+  --color-gold-soft: rgb(var(--rgb-gold-soft));
+  --color-ink: rgb(var(--rgb-ink));
+  --color-muted: rgb(var(--rgb-muted));
+  --color-blush: rgb(var(--rgb-blush));
+  --color-blush-deep: rgb(var(--rgb-blush-deep));
+  --color-rose-soft: rgb(var(--rgb-rose-soft));
+  --color-rose-pale: rgb(var(--rgb-rose-pale));
+  --color-wash-rose: rgb(var(--rgb-wash-rose));
+  --color-wash-cream: rgb(var(--rgb-wash-cream));
+  --color-wash-ivory: rgb(var(--rgb-wash-ivory));
+  --color-wash-blush: rgb(var(--rgb-wash-blush));
+  --color-wash-peach: rgb(var(--rgb-wash-peach));
+  --color-wash-sand: rgb(var(--rgb-wash-sand));
+  --color-scrim: rgb(var(--rgb-scrim));
+  --color-glow: rgb(var(--rgb-glow));
+  --color-on-rose: rgb(var(--rgb-on-rose));
+  --color-rose-hover: rgb(var(--rgb-rose-hover));
 
   /* Lebar kolom undangan di desktop (>=1024px): app dikurung selebar
      HP di kiri, sisa layar jadi panel foto prewedding. */
@@ -26,6 +98,92 @@
   --z-toast: 9900;
   --z-lightbox: 9800;
   --z-bgm: 9700;
+}
+
+/* ---- Cimahi — Ngunduh Mantu — TEMA GELAP: burgundy oxblood & champagne-gold ----
+   Latar & emas diambil dari kartu undangan referensi (vecteezy 19804632):
+   gradasi kartu #420607 → #630A0B, teks "WEDDING" champagne #E9C9B9.
+   Sengaja TIDAK hitam + cream terang: kontras 17:1 terasa keras; kartu
+   referensi ±9:1 dengan teks yang sekeluarga dengan latarnya. Hitam hanya
+   untuk scrim/bayangan. Hijau moodboard tidak dipakai (warna tersier).
+   Hanya --rgb-* yang di-override; alias --color-* ikut otomatis.
+
+   Nama token = PERAN dari tema Banjar, bukan warna harfiah:
+     ivory = latar · ink = teks · gold = garis/border · rose = permukaan tombol ·
+     rose-dark = teks aksen (judul) — di sini LEBIH TERANG dari rose, karena
+     teks aksen di latar gelap harus lebih terang dari latarnya.
+
+   Kontras terhadap latar: ink 11,6:1 · muted 7,5:1 · judul (rose-dark) 9,9:1 ·
+   gold 8,2:1 · teks tombol di atas rose 6,1:1 · di atas rose-hover 4,9:1.
+   Bunga SVG splash & animasi sengaja tetap versi dasar. */
+:root[data-acara="cimahi"] {
+  color-scheme: dark;             /* scrollbar & kontrol form native ikut gelap */
+
+  --rgb-ivory: 82 8 9;            /* #520809 latar burgundy oxblood */
+  --rgb-rose: 166 40 44;          /* #A6282C wine terang — tombol, pill, kelopak (tetap terlihat di latar) */
+  --rgb-rose-dark: 233 205 184;   /* #E9CDB8 champagne-rose — judul script, monogram */
+  --rgb-gold: 214 188 152;        /* #D6BC98 champagne-gold — garis, border, ring, bingkai */
+  --rgb-gold-soft: 243 230 207;   /* #F3E6CF champagne terang — kilau, isi lonceng */
+  --rgb-ink: 239 224 210;         /* #EFE0D2 teks champagne */
+  --rgb-muted: 210 177 159;       /* #D2B19F label kecil */
+
+  /* tint burgundy — gradasi seperti kartu referensi */
+  --rgb-blush: 68 6 7;            /* sedikit lebih gelap dari latar (bukit dekat) */
+  --rgb-blush-deep: 56 4 5;       /* bukit jauh */
+  --rgb-rose-soft: 122 20 24;
+  --rgb-rose-pale: 106 16 19;
+  --rgb-wash-rose: 106 12 13;
+  --rgb-wash-cream: 110 42 30;    /* kilau hangat champagne di splash */
+  --rgb-wash-ivory: 74 7 8;
+  --rgb-wash-blush: 99 10 11;
+  --rgb-wash-peach: 90 9 9;
+  --rgb-wash-sand: 108 13 14;
+
+  --rgb-scrim: 0 0 0;
+  --rgb-glow: 111 10 9;           /* #6F0A09 sorotan = sisi terang gradasi kartu */
+  --rgb-on-rose: 247 236 218;     /* #F7ECDA champagne, bukan putih murni */
+  --rgb-rose-hover: 184 55 58;    /* #B8373A */
+}
+
+/* ---- Cimahi — perlakuan foto (couple & thumbnail galeri) ----
+   Foto studio berlatar abu-abu dingin + baju putih bentrok dengan burgundy
+   hangat. Solusinya: mat champagne-gold + nada hangat (multiply champagne).
+   Putih → cream #F7EEDD, abu-abu #9A9DA0 → taupe #95938B.
+
+   PENGECUALIAN dari aturan "hanya --rgb-* yang di-override": border couple
+   (2px/.5) dan galeri (1px/.3) berbeda di Banjar, dan var() tak terdefinisi
+   me-reset border-width ke `medium`, bukan kembali ke kelas Tailwind. Jadi
+   ditulis sebagai selector bertema. Specificity (0,3,0) — (0,2,0) setelah
+   minifier membuang :root — tetap menang atas utilitas Tailwind (0,1,0)
+   tanpa !important. Di Banjar .photo-frame tidak berefek.
+
+   Mat = border (bukan padding): overflow-hidden memotong di tepi dalam
+   border, jadi zoom hover galeri tidak menutupi mat. Lightbox tidak pakai
+   kelas ini, jadi tetap foto asli. */
+:root[data-acara="cimahi"] .photo-frame {
+  position: relative;
+  border-width: 4px;
+  border-color: rgb(var(--rgb-gold) / 0.85);
+  box-shadow: 0 8px 28px rgb(var(--rgb-scrim) / 0.35); /* ganti pendar champagne shadow-soft */
+}
+/* garis emas tipis di luar mat — hanya couple; reel galeri overflow-x-auto
+   akan memotong ring bagian atas & bawah */
+:root[data-acara="cimahi"] .photo-frame-ring {
+  box-shadow:
+    0 0 0 3px var(--color-ivory),
+    0 0 0 4px rgb(var(--rgb-gold) / 0.55),
+    0 8px 28px rgb(var(--rgb-scrim) / 0.35);
+}
+:root[data-acara="cimahi"] .photo-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;                       /* = padding box, tidak menutupi mat */
+  background: var(--color-gold-soft);
+  mix-blend-mode: multiply;
+  opacity: 0.7;                   /* .5 masih abu-abu, .85 wajah mulai kusam */
+  box-shadow: inset 0 0 24px rgb(var(--rgb-scrim) / 0.25); /* tepi menyatu ke bingkai */
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 html, body {
@@ -54,20 +212,20 @@ body.no-scroll {
   }
 
   .glass {
-    background: rgba(255, 253, 251, 0.35);
+    background: rgb(var(--rgb-ivory) / 0.35);
     backdrop-filter: blur(12px) saturate(120%);
     -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    box-shadow: 0 8px 32px rgba(184, 132, 143, 0.15);
+    border: 1px solid rgb(var(--rgb-gold) / 0.3);
+    box-shadow: 0 8px 32px rgb(var(--rgb-rose-dark) / 0.15);
     border-radius: 24px;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-full bg-rose text-white font-medium tracking-wide transition hover:bg-rose-dark border border-gold/40 shadow-soft;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full bg-rose text-on-rose font-medium tracking-wide transition hover:bg-rose-hover border border-gold/40 shadow-soft;
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-full border border-rose text-rose-dark font-medium tracking-wide transition hover:bg-rose hover:text-white;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full border border-rose text-rose-dark font-medium tracking-wide transition hover:bg-rose hover:text-on-rose;
   }
 
   .section {

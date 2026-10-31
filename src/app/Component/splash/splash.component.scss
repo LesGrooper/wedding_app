@@ -54,9 +54,9 @@
   inset: 0;
   z-index: 5;
   background:
-    radial-gradient(120% 90% at 18% 85%, #F7E9E3 0%, rgba(247, 233, 227, 0) 55%),
-    radial-gradient(110% 85% at 82% 12%, #FBF3E7 0%, rgba(251, 243, 231, 0) 52%),
-    linear-gradient(135deg, #FFFDFB 0%, #FBF4EF 50%, #F7EBE4 100%);
+    radial-gradient(120% 90% at 18% 85%, var(--color-wash-rose) 0%, rgb(var(--rgb-wash-rose) / 0) 55%),
+    radial-gradient(110% 85% at 82% 12%, var(--color-wash-cream) 0%, rgb(var(--rgb-wash-cream) / 0) 52%),
+    linear-gradient(135deg, var(--color-ivory) 0%, var(--color-wash-ivory) 50%, var(--color-wash-blush) 100%);
 }
 
 .bd-cluster {
@@ -129,11 +129,11 @@
   /* tepi depan = garis (62%,0)->(100%,38%); garland menutup garis lurusnya */
   clip-path: polygon(0 0, 62% 0, 100% 38%, 100% 100%, 0 100%);
   background:
-    linear-gradient(to top right, rgba(216, 167, 177, 0) 55%, rgba(216, 167, 177, .14) 74%, rgba(216, 167, 177, .3) 100%),
-    radial-gradient(52% 40% at 30% 72%, rgba(247, 233, 227, .9) 0%, rgba(247, 233, 227, 0) 70%),
-    radial-gradient(46% 38% at 68% 30%, rgba(251, 243, 231, .9) 0%, rgba(251, 243, 231, 0) 68%),
-    radial-gradient(40% 34% at 50% 52%, rgba(244, 232, 228, .8) 0%, rgba(244, 232, 228, 0) 70%),
-    linear-gradient(135deg, #FFFDFB 0%, #FAF0EA 45%, #F5E5DD 100%);
+    linear-gradient(to top right, rgb(var(--rgb-rose) / 0) 55%, rgb(var(--rgb-rose) / .14) 74%, rgb(var(--rgb-rose) / .3) 100%),
+    radial-gradient(52% 40% at 30% 72%, rgb(var(--rgb-wash-rose) / .9) 0%, rgb(var(--rgb-wash-rose) / 0) 70%),
+    radial-gradient(46% 38% at 68% 30%, rgb(var(--rgb-wash-cream) / .9) 0%, rgb(var(--rgb-wash-cream) / 0) 68%),
+    radial-gradient(40% 34% at 50% 52%, rgb(var(--rgb-blush) / .8) 0%, rgb(var(--rgb-blush) / 0) 70%),
+    linear-gradient(135deg, var(--color-ivory) 0%, var(--color-wash-peach) 45%, var(--color-wash-sand) 100%);
 
   /* tekstur bunga samar & ladang statis (ikut ter-clip) */
   img.tx,
@@ -186,18 +186,19 @@
     position: absolute;
     inset: 0;
     background: radial-gradient(74% 56% at 50% 46%,
-      rgba(255, 253, 251, .96) 0%,
-      rgba(255, 253, 251, .9) 32%,
-      rgba(255, 253, 251, .55) 60%,
-      rgba(255, 253, 251, .12) 84%,
-      rgba(255, 253, 251, 0) 100%);
+      rgb(var(--rgb-ivory) / .96) 0%,
+      rgb(var(--rgb-ivory) / .9) 32%,
+      rgb(var(--rgb-ivory) / .55) 60%,
+      rgb(var(--rgb-ivory) / .12) 84%,
+      rgb(var(--rgb-ivory) / 0) 100%);
   }
 
   .welcome {
     font-family: 'Great Vibes', cursive;
     font-size: clamp(2.1rem, 7vw, 2.9rem);
     color: var(--color-rose-dark);
-    text-shadow: 0 1px 10px rgba(255, 255, 255, .7);
+    /* halo teks = warna LATAR (bukan putih): terang di Banjar, gelap di Cimahi */
+    text-shadow: 0 1px 10px rgb(var(--rgb-ivory) / .7);
   }
 
   .quote {
@@ -209,8 +210,8 @@
     max-width: 36ch;
     color: var(--color-ink);
     text-shadow:
-      0 0 6px rgba(255, 253, 251, .95),
-      0 0 14px rgba(255, 253, 251, .8);
+      0 0 6px rgb(var(--rgb-ivory) / .95),
+      0 0 14px rgb(var(--rgb-ivory) / .8);
   }
 
   .qs {
@@ -220,8 +221,8 @@
     text-transform: uppercase;
     color: var(--color-ink);
     text-shadow:
-      0 0 6px rgba(255, 253, 251, .95),
-      0 0 12px rgba(255, 253, 251, .85);
+      0 0 6px rgb(var(--rgb-ivory) / .95),
+      0 0 12px rgb(var(--rgb-ivory) / .85);
   }
 }
 
@@ -240,7 +241,7 @@
   width: 87%;
   height: 87%;
   display: block;
-  filter: drop-shadow(0 12px 26px rgba(59, 49, 56, .2));
+  filter: drop-shadow(0 12px 26px rgb(var(--rgb-scrim) / .2));
 
   image {
     transform-box: fill-box;
@@ -373,14 +374,14 @@
 
 .content .mark {
   margin-bottom: 0.85rem;
-  filter: drop-shadow(0 1px 6px rgba(255, 255, 255, 0.7));
+  filter: drop-shadow(0 1px 6px rgb(var(--rgb-ivory) / 0.7));
 }
 
 .content .script {
   font-family: 'Great Vibes', cursive;
   font-size: clamp(2rem, 6vw, 3rem);
   color: var(--color-rose-dark);
-  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 8px rgb(var(--rgb-ivory) / 0.6);
   margin-bottom: 1rem;
 }
 
@@ -398,7 +399,7 @@
   font-weight: 500;
   font-size: clamp(1.7rem, 5vw, 2.4rem);
   color: var(--color-ink);
-  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 8px rgb(var(--rgb-ivory) / 0.6);
 }
 
 .content .apology {
@@ -413,23 +414,23 @@
   font-size: 0.8rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--color-on-rose);
   background: var(--color-rose);
   border: 1px solid var(--color-gold);
   border-radius: 999px;
   padding: 0.85rem 2.6rem;
   cursor: pointer;
   box-shadow:
-    0 6px 24px rgba(59, 49, 56, 0.18),
-    0 0 0 4px rgba(232, 212, 160, 0.3);
+    0 6px 24px rgb(var(--rgb-scrim) / 0.18),
+    0 0 0 4px rgb(var(--rgb-gold-soft) / 0.3);
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 
   &:hover {
-    background: var(--color-rose-dark);
+    background: var(--color-rose-hover);
     transform: translateY(-2px);
     box-shadow:
-      0 10px 28px rgba(59, 49, 56, 0.22),
-      0 0 0 4px rgba(232, 212, 160, 0.5);
+      0 10px 28px rgb(var(--rgb-scrim) / 0.22),
+      0 0 0 4px rgb(var(--rgb-gold-soft) / 0.5);
   }
 }
 
@@ -444,7 +445,7 @@
   font-size: 0.72rem;
   letter-spacing: 0.18em;
 
-  span { color: rgba(139, 123, 130, 0.6); }
+  span { color: rgb(var(--rgb-muted) / 0.6); }
 
   button {
     text-transform: uppercase;
@@ -457,7 +458,7 @@
     transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 
     &.active {
-      color: #fff;
+      color: var(--color-on-rose);
       background: var(--color-rose);
       border-color: var(--color-rose-dark);
     }

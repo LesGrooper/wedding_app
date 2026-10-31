@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 
 import { environment } from '../../../environments/environment';
+import { EventConfig } from '../../Models/event.model';
+import { EventService } from '../../Services/event.service';
 import { GuestService } from '../../Services/guest.service';
 import { TransliterationService } from '../../Services/transliteration.service';
 
@@ -53,6 +55,15 @@ export class InvitationPage {
   env = environment;
 
   /**
+   * Acara aktif dari `?acara=` (tanggal, jadwal, lokasi). Data bersama —
+   * nama mempelai, rekening — tetap dari `env`.
+   */
+  event:EventConfig;
+
+  /** Kunci acara aktif, mis. 'banjar' — dipakai untuk label `event_label_<kunci>`. */
+  eventKey:string;
+
+  /**
    * `true` while the splash overlay is active. The splash is rendered
    * conditionally; flipping this to `false` unmounts the overlay and
    * also re-enables body scrolling (see onOpen()).
@@ -76,7 +87,11 @@ export class InvitationPage {
     public guestService:GuestService,
     public ts:TransliterationService,
     private title:Title,
+    eventService:EventService,
   ) {
+    this.event = eventService.current;
+    this.eventKey = eventService.key;
+
     // Lock background scrolling while the splash is on top of the page.
     // Restored in onOpen() when the user dismisses the splash.
     document.body.classList.add('no-scroll');
@@ -84,7 +99,8 @@ export class InvitationPage {
     // Judul tab diisi saat runtime, bukan dihardcode di index.html: .env dan
     // src/environments/* sengaja gitignored supaya data mempelai tidak ikut
     // ter-commit. <title> statis di index.html tinggal jadi fallback.
-    this.title.setTitle(`${this.env.groom.name} & ${this.env.bride.name} — Undangan Pernikahan`);
+    // Label acara ikut disebut supaya tab Banjar & Cimahi bisa dibedakan.
+    this.title.setTitle(`${this.env.groom.name} & ${this.env.bride.name} — ${this.trans(`event_label_${this.eventKey}`)}`);
   }
 
   trans(key:string, ...p:string[]):string {

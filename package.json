@@ -12,6 +12,7 @@
     "test": "node scripts/generate-env.mjs && ng test"
   },
   "private": true,
+  "packageManager": "pnpm@11.18.0",
   "dependencies": {
     "@angular/animations": "^18.2.0",
     "@angular/common": "^18.2.0",

@@ -67,5 +67,7 @@ export async function ClearStorage():Promise<void> {
  * Storage key used to remember that a given guest already submitted
  * their RSVP, so we can disable the form on subsequent visits.
  * Falls back to "anon" when no slug is present in the URL.
+ * Per acara: tamu yang diundang ke Banjar DAN Cimahi dengan slug yang sama
+ * tetap bisa RSVP di acara kedua.
  */
-export const RSVP_FLAG = (slug:string) => `rsvp-submitted-${slug || 'anon'}`;
+export const RSVP_FLAG = (event:string, slug:string) => `rsvp-submitted-${event}-${slug || 'anon'}`;

@@ -23,11 +23,16 @@
     <h1 class="font-serif text-5xl @md:text-7xl text-ink leading-tight mb-2">
       {{ groom }}
     </h1>
-    <p class="font-script text-4xl @md:text-5xl text-rose mb-2">&amp;</p>
+    <!-- text-rose-dark, bukan text-rose: di tema gelap Cimahi burgundy rose
+         di atas hitam cuma 1,9:1; rose-dark dijamin terbaca di kedua tema. -->
+    <p class="font-script text-4xl @md:text-5xl text-rose-dark mb-2">&amp;</p>
     <h1 class="font-serif text-5xl @md:text-7xl text-ink leading-tight mb-8">
       {{ bride }}
     </h1>
 
+    @if (eventLabel) {
+      <p class="mb-3 text-[10px] @md:text-xs uppercase tracking-[0.25em] text-muted">{{ eventLabel }}</p>
+    }
     <div class="inline-block px-6 py-3 rounded-full border border-gold/60 bg-ivory/60 backdrop-blur-sm">
       <p class="text-sm @md:text-base text-ink tracking-wider">{{ formattedDate }}</p>
     </div>

@@ -33,6 +33,9 @@ export const TRANSLATIONS: Record<Lang, Record<string, Value>> = {
     // hero
     hero_save_the_date: 'Simpan Tanggal',
     hero_for_guest: 'Untuk',
+    // acara — label penanda per ?acara=<kunci> (lihat EventService)
+    event_label_banjar: 'Akad & Resepsi',
+    event_label_cimahi: 'Ngunduh Mantu',
     // couple
     couple_title: 'Mempelai',
     couple_groom_parents: (f, m) => `Putra dari Bapak ${f} \n & Ibu ${m}`,
@@ -108,6 +111,9 @@ export const TRANSLATIONS: Record<Lang, Record<string, Value>> = {
     // hero
     hero_save_the_date: 'Save the Date',
     hero_for_guest: 'To',
+    // event — label per ?acara=<key> (see EventService)
+    event_label_banjar: 'Ceremony & Reception',
+    event_label_cimahi: 'Ngunduh Mantu · Homecoming Reception',
     // couple
     couple_title: 'The Couple',
     couple_groom_parents: (f, m) => `Son of Mr. ${f} \n & Mrs. ${m}`,

@@ -12,7 +12,7 @@ export class FloatingFloralComponent {
 
   @Input("position") position:Position = 'top-right';
   @Input("size") size:number = 96;
-  @Input("color") color:string = '#D4AF37';
+  @Input("color") color:string = 'var(--color-gold)';
 
   constructor() { }
 

@@ -19,7 +19,7 @@
   height: 130%;
   width: 22%;
   transform: skewX(-14deg);
-  background: linear-gradient(180deg, rgba(232, 212, 160, 0.35), rgba(232, 212, 160, 0) 70%);
+  background: linear-gradient(180deg, rgb(var(--rgb-gold-soft) / 0.35), rgb(var(--rgb-gold-soft) / 0) 70%);
   opacity: 0.05;
   animation: ray-pulse 11.7s ease-in-out infinite;
   animation-play-state: paused;
@@ -38,7 +38,7 @@
    5.8s = 6 ketukan. */
 .dew {
   position: absolute;
-  fill: #E8D4A0;
+  fill: var(--color-gold-soft);
   opacity: 0;
   animation: dew-twinkle 5.8s ease-in-out infinite;
   animation-play-state: paused;

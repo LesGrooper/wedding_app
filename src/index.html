@@ -4,6 +4,18 @@
   <meta charset="utf-8">
   <title>Undangan Pernikahan</title>
   <base href="/">
+
+  <!-- Tandai acara (?acara=banjar / ?acara=cimahi) SEBELUM paint pertama,
+       supaya tamu Cimahi tidak sempat melihat warna Banjar. Ini satu-satunya
+       parser URL-nya: tema di styles.css dan EventService sama-sama membaca
+       atribut data-acara ini. Nilai tak dikenal = tema default. -->
+  <script>
+    (function () {
+      var m = /[?&]acara=([a-z]+)/i.exec(location.search);
+      if (m) document.documentElement.setAttribute('data-acara', m[1].toLowerCase());
+    })();
+  </script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Undangan pernikahan — kehadiran Anda adalah kebahagiaan kami.">
 

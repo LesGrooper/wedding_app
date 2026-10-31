@@ -307,7 +307,10 @@ const sizeAttrs = (px) => (px ? ` width="${px}" height="${px}"` : '');
 // Me-composite aset floral yang sudah ada (bloom-a / leaf-sprig / sparkles) —
 // jangan gambar floral baru.
 
-function buildOgCover({ groom, bride, dateText }) {
+// Sengaja TANPA tanggal/lokasi: satu build melayani beberapa acara (?acara=),
+// dan crawler preview WhatsApp tidak menjalankan JS — cover ini tampil sama
+// untuk link Banjar maupun Cimahi. Tanggal tercetak = salah untuk salah satunya.
+function buildOgCover({ groom, bride }) {
   const W = 1200;
   const H = 630;
   const cx = W / 2;
@@ -315,7 +318,7 @@ function buildOgCover({ groom, bride, dateText }) {
   const nGroom = outline(fonts.serif, groom, 54);
   const nBride = outline(fonts.serif, bride, 54);
   const amp = outline(fonts.script, '&', 46);
-  const date = outline(fonts.serif, dateText.toUpperCase(), 25, 3.2, 'lining');
+  const caption = outline(fonts.serif, 'UNDANGAN PERNIKAHAN', 25, 3.2, 'lining');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
   <!-- OG cover — AUTO-GENERATED, lihat scripts/generate-icons.mjs -->
@@ -339,7 +342,7 @@ function buildOgCover({ groom, bride, dateText }) {
   <path d="${nBride.d}" transform="${baselineAt(nBride, cx, 452)}" fill="${C.ink}"/>
 
   <rect x="${cx - 60}" y="492" width="120" height="1" fill="${C.gold}" opacity="0.7"/>
-  <path d="${date.d}" transform="${baselineAt(date, cx, 542)}" fill="${C.muted}"/>
+  <path d="${caption.d}" transform="${baselineAt(caption, cx, 542)}" fill="${C.muted}"/>
 </svg>
 `;
 }
@@ -436,18 +439,10 @@ const fonts = { serif: await loadFont('serif'), script: await loadFont('script')
 const vars = parseEnvFile(join(root, '.env'), TAG);
 const groom = vars['GROOM_NAME'];
 const bride = vars['BRIDE_NAME'];
-const eventDate = vars['EVENT_DATE'];
-if (!groom || !bride || !eventDate) {
-  console.error(`[${TAG}] GROOM_NAME / BRIDE_NAME / EVENT_DATE wajib terisi di .env (untuk OG cover).`);
+if (!groom || !bride) {
+  console.error(`[${TAG}] GROOM_NAME / BRIDE_NAME wajib terisi di .env (untuk OG cover).`);
   process.exit(1);
 }
-const dateText = new Intl.DateTimeFormat('id-ID', {
-  weekday: 'long',
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-  timeZone: 'Asia/Jakarta',
-}).format(new Date(eventDate));
 
 mkdirSync(publicDir, { recursive: true });
 mkdirSync(imagesDir, { recursive: true });
@@ -477,7 +472,7 @@ writeFileSync(
 );
 
 // -- OG cover, dengan floral yang sudah ada di-composite di atasnya --
-const ogBase = await sharp(Buffer.from(assertClean(buildOgCover({ groom, bride, dateText }), 'og-cover')))
+const ogBase = await sharp(Buffer.from(assertClean(buildOgCover({ groom, bride }), 'og-cover')))
   .png()
   .toBuffer();
 const OG_W = 1200;
