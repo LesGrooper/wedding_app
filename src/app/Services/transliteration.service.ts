@@ -185,7 +185,7 @@ const STORY_CHAPTERS: Record<Lang, StoryChapter[]> = {
     { label: 'Di Kampus', text: 'Semuanya dimulai di kampus. Saat itu, kami hanya dua orang yang kebetulan berada di kelas yang sama. Sekedar tahu, belum saling mencari.' },
     { label: 'Dua Tahun Kemudian', text: 'Dua tahun kemudian, kesempatan menjadi panitia ospek membuat kami menjadi lebih dekat. Ada banyak obrolan dan momen kecil yang menyenangkan. Sayangnya, cerita berhenti sampai di situ, dan kami kembali sibuk dengan jalan masing – masing.' },
     { label: 'Akhir 2025', text: 'Akhir tahun 2025, kami dipertemukan kembali. Kali ini rasanya jauh lebih sederhana, tidak ada yang terburu – buru, semuanya terasa pas.' },
-    { label: 'Hari Ini', text: 'Yang sempat tertuda bukan berarti berakhir. Hari ini kami memulai kisah, sekarang dan selamanya.' },
+    { label: 'Hari Ini', text: 'Yang sempat tertunda bukan berarti berakhir. Hari ini kami memulai kisah, sekarang dan selamanya.' },
   ],
   en: [
     { label: 'On Campus', text: 'It all began on campus. Back then, we were just two people who happened to be in the same class. We knew of each other, but were not yet looking.' },
