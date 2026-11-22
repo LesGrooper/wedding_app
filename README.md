@@ -97,14 +97,20 @@ Catatan:
 
 ## Link undangan personal
 
-Nama tamu diambil dari query param `?to=`:
+Acara dipilih lewat `?acara=`, nama tamu lewat `?to=`:
 
 ```
-https://domain-kamu.com/?to=andi-budi     → "Andi Budi"
-https://domain-kamu.com/?to=andi+keluarga → "Andi & Keluarga"
+https://domain-kamu.com/?acara=cimahi&to=Andi-Budi       → "Andi Budi"
+https://domain-kamu.com/?acara=cimahi&to=Andi%2BKeluarga → "Andi & Keluarga"
 ```
 
-Tanpa `?to=`, sapaan fallback "Tamu Undangan" dipakai. Slug juga ikut terkirim di RSVP/ucapan sehingga bisa dicocokkan dengan tab `Guests` di Spreadsheet.
+`&` ditulis sebagai `+` di slug, tapi **harus di-encode jadi `%2B`** di URL — router Angular membaca `+` mentah sebagai spasi, jadi `to=Andi+Keluarga` tampil "Andi Keluarga". Selalu tulis `?acara=` juga untuk acara default, supaya link lama tidak ikut berubah kalau urutan `EVENTS` diganti.
+
+Tanpa `?to=`, sapaan fallback "Tamu Undangan" dipakai. Slug juga ikut terkirim di RSVP/ucapan sehingga bisa dicocokkan dengan daftar tamu di Spreadsheet.
+
+### Generate link dari Spreadsheet
+
+Link tidak perlu dirakit manual: `apps-script/undangan/Undangan.gs` (di spreadsheet **List Tamu Undangan**, terpisah dari script RAB) mengisi kolom link setiap tab `Guest <Pengundang> - <Acara>`. Akhiran nama tab menjadi `?acara=` dan divalidasi terhadap daftar acara. Base URL diambil dari tab `Config` (`dev` / `prod` / `base_url`), jadi saat domain sudah dibeli cukup ganti satu sel lalu jalankan ulang. Jalankan `diagnosaTamu()` dulu (read-only) untuk mengecek tab, kolom, dan slug dobel.
 
 ## Keamanan & git
 
