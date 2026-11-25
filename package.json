@@ -6,7 +6,7 @@
     "config:env": "node scripts/generate-env.mjs",
     "icons": "node scripts/generate-icons.mjs",
     "start": "node scripts/generate-env.mjs && ng serve",
-    "build": "node scripts/generate-env.mjs && ng build",
+    "build": "node scripts/generate-env.mjs && ng build && node scripts/build-og-pages.mjs",
     "build:dev": "node scripts/generate-env.mjs && ng build --configuration development",
     "watch": "node scripts/generate-env.mjs && ng build --watch --configuration development",
     "test": "node scripts/generate-env.mjs && ng test"

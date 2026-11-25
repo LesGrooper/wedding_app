@@ -83,7 +83,7 @@ Monogram **R & A** adalah satu-satunya sumber identitas visual: favicon, icon PW
 pnpm run icons
 ```
 
-Menghasilkan → `public/favicon.svg` · `favicon.ico` (16+32) · `favicon-32.png` · `apple-touch-icon.png` (180) · `icon-192.png` · `icon-512.png` · `icon-512-maskable.png` · `public/assets/images/og-cover.jpg` (1200×630, memuat nama & tanggal dari `.env`) · `src/app/Component/monogram/monogram.paths.ts` (dipakai `<app-monogram>` di splash & hero).
+Menghasilkan → `public/favicon.svg` · `favicon.ico` (16+32) · `favicon-32.png` · `apple-touch-icon.png` (180) · `icon-192.png` · `icon-512.png` · `icon-512-maskable.png` · `public/assets/images/og-cover.jpg` + `og-cover-cimahi.jpg` (1200×630, nama dari `.env`, satu cover per acara — `OG_COVERS`) · `src/app/Component/monogram/monogram.paths.ts` (dipakai `<app-monogram>` di splash & hero).
 
 Catatan:
 
@@ -93,7 +93,9 @@ Catatan:
 
 ### ⚠️ Wajib diisi saat deploy
 
-`src/index.html` memakai placeholder `https://CHANGEME.example/` pada `og:url` dan `og:image`. **Ganti dengan domain asli** — WhatsApp dan Facebook tidak me-resolve path relatif pada `og:image`, jadi selama masih placeholder kartu preview link tidak akan muncul.
+`og:url` & `og:image` di `src/index.html` menunjuk ke domain vercel. **Ganti saat pindah ke domain asli** — WhatsApp dan Facebook tidak me-resolve path relatif pada `og:image`.
+
+**Preview per acara.** Crawler WhatsApp tidak menjalankan JS, jadi `?acara=` tidak bisa mengganti `og:*` dari browser. Override per acara ditulis di blok `<script id="og-acara">` di `src/index.html`; setelah `ng build`, `scripts/build-og-pages.mjs` membuat `cimahi.html` (meta ditimpa) dan `app.html` (default), lalu menghapus `index.html` supaya rewrites di `vercel.json` berlaku untuk `/` (Vercel memeriksa filesystem sebelum rewrites). Menambah acara = tambah entri di blok itu + rewrite di `vercel.json` + cover di `OG_COVERS`; build gagal kalau rewrite-nya lupa.
 
 ## Link undangan personal
 

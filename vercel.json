@@ -3,5 +3,8 @@
   "framework": null,
   "buildCommand": "pnpm run build",
   "outputDirectory": "dist/wedding-invitation/browser",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/", "has": [{ "type": "query", "key": "acara", "value": "cimahi" }], "destination": "/cimahi.html" },
+    { "source": "/(.*)", "destination": "/app.html" }
+  ]
 }

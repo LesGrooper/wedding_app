@@ -40,6 +40,18 @@ const C = {
   muted: '#8B7B82',
 };
 
+/* Palet tema Cimahi — samakan dengan :root[data-acara="cimahi"] di src/styles.css.
+   Kunci sama dengan C supaya builder cukup menerima `pal`. */
+const C_CIMAHI = {
+  ivory: '#520809',     // latar burgundy oxblood
+  rose: '#A6282C',
+  roseDark: '#E9CDB8',  // champagne-rose — monogram
+  gold: '#D6BC98',      // champagne-gold — garis, ring, bingkai
+  goldSoft: '#F3E6CF',
+  ink: '#EFE0D2',       // teks champagne
+  muted: '#D2B19F',
+};
+
 // Sparkle 4-titik — path yang sama dipakai di splash/ambient-birds/ambient-dawn
 // dan public/assets/splash/sparkles.svg. Radius ±12 unit, berpusat di (0,0).
 const SPARKLE =
@@ -274,8 +286,9 @@ function fullGlyphs() {
  *                      apple-touch & maskable wajib punya ground opaque
  * @param contentScale  <1 untuk maskable (safe zone), skala terhadap titik pusat
  * @param framed        tampilkan ring emas
+ * @param pal           palet (C = Banjar/default, C_CIMAHI untuk cover Cimahi)
  */
-function buildFull({ px, ground = 'none', contentScale = 1, framed = true } = {}) {
+function buildFull({ px, ground = 'none', contentScale = 1, framed = true, pal = C } = {}) {
   const f = FULL;
   const g = fullGlyphs();
   const s = contentScale;
@@ -283,19 +296,19 @@ function buildFull({ px, ground = 'none', contentScale = 1, framed = true } = {}
 
   const ring = framed
     ? `
-    <circle cx="${f.cx}" cy="${f.cx}" r="${f.ringOuter}" fill="none" stroke="${C.gold}" stroke-width="1.6" opacity="0.85"/>
-    <circle cx="${f.cx}" cy="${f.cx}" r="${f.ringInner}" fill="none" stroke="${C.gold}" stroke-width="0.7" opacity="0.4"/>`
+    <circle cx="${f.cx}" cy="${f.cx}" r="${f.ringOuter}" fill="none" stroke="${pal.gold}" stroke-width="1.6" opacity="0.85"/>
+    <circle cx="${f.cx}" cy="${f.cx}" r="${f.ringInner}" fill="none" stroke="${pal.gold}" stroke-width="0.7" opacity="0.4"/>`
     : '';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${f.vb} ${f.vb}"${sizeAttrs(px)}>
   <!-- Monogram R & A — varian full/seal. AUTO-GENERATED, lihat scripts/generate-icons.mjs -->
-  ${ground === 'ivory' ? `<rect x="0" y="0" width="${f.vb}" height="${f.vb}" fill="${C.ivory}"/>` : ''}
+  ${ground === 'ivory' ? `<rect x="0" y="0" width="${f.vb}" height="${f.vb}" fill="${pal.ivory}"/>` : ''}
   <g${wrap}>${ring}
-    <path d="${SPARKLE}" transform="translate(${f.cx} ${f.sparkleY}) scale(${f.sparkleScale})" fill="${C.goldSoft}"/>
-    <path d="${g.R.d}" transform="${g.R.t}" fill="${C.roseDark}"/>
-    <path d="${g.amp.d}" transform="${g.amp.t}" fill="${C.gold}"/>
-    <path d="${g.A.d}" transform="${g.A.t}" fill="${C.roseDark}"/>
-    <rect x="${f.cx - f.ruleHalf}" y="${f.ruleY}" width="${f.ruleHalf * 2}" height="0.9" fill="${C.gold}" opacity="0.8"/>
+    <path d="${SPARKLE}" transform="translate(${f.cx} ${f.sparkleY}) scale(${f.sparkleScale})" fill="${pal.goldSoft}"/>
+    <path d="${g.R.d}" transform="${g.R.t}" fill="${pal.roseDark}"/>
+    <path d="${g.amp.d}" transform="${g.amp.t}" fill="${pal.gold}"/>
+    <path d="${g.A.d}" transform="${g.A.t}" fill="${pal.roseDark}"/>
+    <rect x="${f.cx - f.ruleHalf}" y="${f.ruleY}" width="${f.ruleHalf * 2}" height="0.9" fill="${pal.gold}" opacity="0.8"/>
   </g>
 </svg>
 `;
@@ -307,10 +320,18 @@ const sizeAttrs = (px) => (px ? ` width="${px}" height="${px}"` : '');
 // Me-composite aset floral yang sudah ada (bloom-a / leaf-sprig / sparkles) —
 // jangan gambar floral baru.
 
-// Sengaja TANPA tanggal/lokasi: satu build melayani beberapa acara (?acara=),
-// dan crawler preview WhatsApp tidak menjalankan JS — cover ini tampil sama
-// untuk link Banjar maupun Cimahi. Tanggal tercetak = salah untuk salah satunya.
-function buildOgCover({ groom, bride }) {
+// Satu cover per acara — crawler preview WhatsApp tidak menjalankan JS, jadi
+// cover-nya dipilih di server: scripts/build-og-pages.mjs membuat <acara>.html
+// dengan og:image miliknya, dan vercel.json mengarahkan /?acara=<acara> ke sana.
+// Tetap TANPA tanggal/lokasi; pembeda antar-acara cukup label + tema warna.
+const OG_COVERS = [
+  // default (Banjar) — tag og:* bawaan di src/index.html
+  { file: 'og-cover.jpg', pal: C, bg: [C.ivory, '#FBF4EF', '#F5E5DD'], caption: 'UNDANGAN PERNIKAHAN' },
+  // Cimahi — gradasi burgundy = --rgb-glow → --rgb-ivory → --rgb-blush-deep
+  { file: 'og-cover-cimahi.jpg', pal: C_CIMAHI, bg: ['#6F0A09', '#520809', '#380405'], caption: 'NGUNDUH MANTU' },
+];
+
+function buildOgCover({ groom, bride, pal, bg, caption: label }) {
   const W = 1200;
   const H = 630;
   const cx = W / 2;
@@ -318,31 +339,31 @@ function buildOgCover({ groom, bride }) {
   const nGroom = outline(fonts.serif, groom, 54);
   const nBride = outline(fonts.serif, bride, 54);
   const amp = outline(fonts.script, '&', 46);
-  const caption = outline(fonts.serif, 'UNDANGAN PERNIKAHAN', 25, 3.2, 'lining');
+  const caption = outline(fonts.serif, label, 25, 3.2, 'lining');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
   <!-- OG cover — AUTO-GENERATED, lihat scripts/generate-icons.mjs -->
   <defs>
     <radialGradient id="og-bg" cx="50%" cy="38%" r="78%">
-      <stop offset="0%" stop-color="${C.ivory}"/>
-      <stop offset="62%" stop-color="#FBF4EF"/>
-      <stop offset="100%" stop-color="#F5E5DD"/>
+      <stop offset="0%" stop-color="${bg[0]}"/>
+      <stop offset="62%" stop-color="${bg[1]}"/>
+      <stop offset="100%" stop-color="${bg[2]}"/>
     </radialGradient>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#og-bg)"/>
 
-  <g fill="none" stroke="${C.gold}" stroke-width="1" opacity="0.45">
+  <g fill="none" stroke="${pal.gold}" stroke-width="1" opacity="0.45">
     <rect x="28" y="28" width="${W - 56}" height="${H - 56}" rx="4"/>
   </g>
 
-  <g transform="translate(${cx - 75} 46) scale(1.25)">${stripSvgTag(buildFull({ framed: true }))}</g>
+  <g transform="translate(${cx - 75} 46) scale(1.25)">${stripSvgTag(buildFull({ framed: true, pal }))}</g>
 
-  <path d="${nGroom.d}" transform="${baselineAt(nGroom, cx, 322)}" fill="${C.ink}"/>
-  <path d="${amp.d}" transform="${baselineAt(amp, cx, 386)}" fill="${C.gold}"/>
-  <path d="${nBride.d}" transform="${baselineAt(nBride, cx, 452)}" fill="${C.ink}"/>
+  <path d="${nGroom.d}" transform="${baselineAt(nGroom, cx, 322)}" fill="${pal.ink}"/>
+  <path d="${amp.d}" transform="${baselineAt(amp, cx, 386)}" fill="${pal.gold}"/>
+  <path d="${nBride.d}" transform="${baselineAt(nBride, cx, 452)}" fill="${pal.ink}"/>
 
-  <rect x="${cx - 60}" y="492" width="120" height="1" fill="${C.gold}" opacity="0.7"/>
-  <path d="${caption.d}" transform="${baselineAt(caption, cx, 542)}" fill="${C.muted}"/>
+  <rect x="${cx - 60}" y="492" width="120" height="1" fill="${pal.gold}" opacity="0.7"/>
+  <path d="${caption.d}" transform="${baselineAt(caption, cx, 542)}" fill="${pal.muted}"/>
 </svg>
 `;
 }
@@ -471,10 +492,7 @@ writeFileSync(
   await png(buildFull({ px: 512, ground: 'ivory', contentScale: 0.6, framed: true }), 'icon-512-maskable')
 );
 
-// -- OG cover, dengan floral yang sudah ada di-composite di atasnya --
-const ogBase = await sharp(Buffer.from(assertClean(buildOgCover({ groom, bride }), 'og-cover')))
-  .png()
-  .toBuffer();
+// -- OG cover per acara, dengan floral yang sudah ada di-composite di atasnya --
 const OG_W = 1200;
 const OG_H = 630;
 const floral = [
@@ -512,14 +530,19 @@ for (const f of floral) {
     top: Math.max(0, Math.min(f.top, OG_H - meta.height)),
   });
 }
-const ogFinal = await sharp(ogBase)
-  .composite(overlays)
-  .jpeg({ quality: 88, chromaSubsampling: '4:4:4' })
-  .toBuffer();
-writeFileSync(join(imagesDir, 'og-cover.jpg'), ogFinal);
+for (const cover of OG_COVERS) {
+  const base = await sharp(Buffer.from(assertClean(buildOgCover({ groom, bride, ...cover }), cover.file)))
+    .png()
+    .toBuffer();
+  const out = await sharp(base)
+    .composite(overlays)
+    .jpeg({ quality: 88, chromaSubsampling: '4:4:4' })
+    .toBuffer();
+  writeFileSync(join(imagesDir, cover.file), out);
+}
 
 // -- path untuk komponen Angular --
 writeMonogramPaths();
 
 console.log(`[${TAG}] OK — favicon.svg/.ico, favicon-32, apple-touch-icon, icon-192/512(+maskable),`);
-console.log(`[${TAG}]      assets/images/og-cover.jpg, dan monogram.paths.ts di-generate.`);
+console.log(`[${TAG}]      assets/images/${OG_COVERS.map((c) => c.file).join(', ')}, dan monogram.paths.ts di-generate.`);
