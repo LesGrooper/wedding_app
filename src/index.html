@@ -19,20 +19,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Undangan pernikahan — kehadiran Anda adalah kebahagiaan kami.">
 
-  <!-- PENTING saat deploy: ganti https://CHANGEME.example/ dengan domain asli.
+  <!-- Ganti domain di og:url & og:image saat pindah ke domain asli.
        WhatsApp & Facebook tidak me-resolve path relatif pada og:image, jadi
-       tanpa URL absolut kartu preview link tidak akan pernah muncul. -->
+       tanpa URL absolut kartu preview link tidak akan pernah muncul.
+       Tag di bawah = preview acara default (Banjar). -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Undangan Pernikahan">
   <meta property="og:locale" content="id_ID">
   <meta property="og:title" content="Undangan Pernikahan">
   <meta property="og:description" content="Kami mengundang Anda untuk hadir di hari bahagia kami.">
-  <meta property="og:url" content="https://wedding-app-chi-sage.vercel.app/">
-  <meta property="og:image" content="https://wedding-app-chi-sage.vercel.app/assets/images/og-cover.jpg">
+  <meta property="og:url" content="https://theday-rezkiayu.com/">
+  <meta property="og:image" content="https://theday-rezkiayu.com/assets/images/og-cover.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Monogram R & A — undangan pernikahan">
   <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Preview per acara (?acara=<kunci>). Crawler WhatsApp TIDAK menjalankan JS,
+       jadi tag di atas tidak bisa diganti dari browser. Saat build,
+       scripts/build-og-pages.mjs membuat <kunci>.html dari file ini dengan meta
+       di blok ini menimpa meta bernama sama (og:image boleh path relatif — dibuat
+       absolut dari og:url), dan vercel.json mengirim file itu untuk /?acara=<kunci>.
+       Acara yang tidak tercantum memakai tag default di atas.
+       Tambah acara di sini → tambah juga rewrite-nya di vercel.json (build gagal kalau lupa).
+       Cover-nya dari `pnpm run icons` (OG_COVERS di scripts/generate-icons.mjs). -->
+  <script type="application/json" id="og-acara">
+    {
+      "cimahi": {
+        "og:title": "Undangan Ngunduh Mantu",
+        "og:description": "Kami mengundang Anda untuk hadir di acara ngunduh mantu kami.",
+        "og:image": "assets/images/og-cover-cimahi.jpg",
+        "og:image:alt": "Monogram R & A — undangan ngunduh mantu",
+        "theme-color": "#520809"
+      }
+    }
+  </script>
 
   <!-- Brand mark R & A — di-generate oleh `pnpm run icons` -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
